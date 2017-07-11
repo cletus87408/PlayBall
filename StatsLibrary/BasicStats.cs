@@ -13,4 +13,14 @@ namespace StatsLibrary
             return atBats != 0 ? hits / (1.0 * atBats) : 0.0;
         }
     }
+
+    public static class AdvancedStats
+    {
+        public static double OPS()
+        {
+            return 1;
+        }
+    }
+
+
 }
