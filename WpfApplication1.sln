@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.15
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfApplication1", "WpfApplication1.csproj", "{09DD59E9-197F-4C19-A11D-30A743231EE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatsLibrary", "StatsLibrary\StatsLibrary.csproj", "{33BF1907-FED8-4A20-A155-D9ADAB5F80A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseballAverageStatsTest", "BaseballAverageStatsTest\BaseballAverageStatsTest.csproj", "{B3940B61-EC80-46E8-A6A6-B154F3F02D70}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{09DD59E9-197F-4C19-A11D-30A743231EE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{09DD59E9-197F-4C19-A11D-30A743231EE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{09DD59E9-197F-4C19-A11D-30A743231EE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{09DD59E9-197F-4C19-A11D-30A743231EE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33BF1907-FED8-4A20-A155-D9ADAB5F80A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33BF1907-FED8-4A20-A155-D9ADAB5F80A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33BF1907-FED8-4A20-A155-D9ADAB5F80A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33BF1907-FED8-4A20-A155-D9ADAB5F80A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3940B61-EC80-46E8-A6A6-B154F3F02D70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3940B61-EC80-46E8-A6A6-B154F3F02D70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3940B61-EC80-46E8-A6A6-B154F3F02D70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3940B61-EC80-46E8-A6A6-B154F3F02D70}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
