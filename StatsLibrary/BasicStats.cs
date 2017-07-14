@@ -24,6 +24,13 @@ namespace StatsLibrary
             return (atBats + walks + hitByPitch + sacHit + sacFly + reachedOnDefensiveInterference);
         }
 
+        //NIBB
+        //Non Intentional Base on Balls = BB - IBB
+        public static double NonIntentionalBaseOnBalls(int walks, int intentionalWalks)
+        {
+            return (walks - (1.0 * intentionalWalks));
+        }
+
         // BA
         // Batting Average = H / AB
         public static double BattingAverage(int atBats, int hits)

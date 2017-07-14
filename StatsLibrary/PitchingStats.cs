@@ -49,5 +49,19 @@ namespace StatsLibrary
         {
             return atBatsFaced != 0 ? (hitsAllowed / (1.0 * atBatsFaced)) : 0.0;
         }
+
+        //RA
+        //Run Average = runs scored * 9 / innings pitched
+        public static double RunAverage(int runs, int inningsPitched)
+        {
+            return inningsPitched != 0 ? ((runs * 9.0) / inningsPitched) : 0.0;
+        }
+
+        //WHIP
+        //Walks Plus Hits Per Inning Pitched = (H+BB)/IP
+        public static double WalksPlusHitsPerInningPitched(int hits, int walks, int inningsPitched)
+        {
+            return inningsPitched != 0 ? ((hits + walks) / (1.0 * inningsPitched)) : 0.0;
+        }
     }
 }

@@ -22,6 +22,7 @@ namespace BaseballAverageStatsTest
             Assert.AreEqual(RetVal, (212.0 - 29 - 8 - 13), 1E-10);
         }
     }
+
     [TestClass]
     public class PlateAppearancesStatsTest
     {
@@ -40,6 +41,26 @@ namespace BaseballAverageStatsTest
             Assert.AreEqual(RetVal, (679.0 + 36 + 6 + 3 + 1 + 0), 1E-10);
         }
     }
+
+    [TestClass]
+    public class NonIntentionalBaseOnBalls
+    {
+        //Non Intentional Base on Balls = BB - IBB
+        [TestMethod]
+        public void NonIntentionalBaseOnBallsValid()
+        {
+            double RetVal = BasicStats.NonIntentionalBaseOnBalls(2, 1);
+            Assert.AreEqual(RetVal, (2.0 - 1), 1E-10);
+        }
+
+        [TestMethod]
+        public void NonIntentionalBaseOnBallsValidLarge()
+        {
+            double RetVal = BasicStats.NonIntentionalBaseOnBalls(300, 4);
+            Assert.AreEqual(RetVal, (300.0 - 4), 1E-10);
+        }
+    }
+
     [TestClass]
     public class BattingAverageStatsTest
     {
@@ -578,6 +599,64 @@ namespace BaseballAverageStatsTest
             Assert.AreEqual(RetVal, ((1.8 * OPS) / 4), 1E-10);
         }
     }
+
+    [TestClass]
+    public class WeightedOnBaseAverageStatsTest
+    {
+        // Weighted on base average = ((0.72 * NIBB) + (0.75 * HBP) + (0.90 * 1B) + (0.92 * RBOE) + (1.24 * 2B) + (1.56 * 3B) + (1.95 * HR)) / PA
+        [TestMethod]
+        public void WeightedOnBaseAverageDivideByZero()
+        {
+            double RetVal = AdvancedStats.WeightedOnBaseAverage(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            Assert.AreEqual(RetVal, 0);
+        }
+
+        [TestMethod]
+        public void WeightedOnBaseAverageValid() //using ichiro 2003
+        {
+            double RetVal = AdvancedStats.WeightedOnBaseAverage(36, 7, 6, 212, 0, 29, 8, 13, 679, 3, 1, 0);
+
+            double plateAppearances = BasicStats.PlateAppearances(679, 36, 6, 3, 1, 0);
+            double singles = BasicStats.Singles(212, 29, 8, 13);
+            double nonIntentionalWalks = BasicStats.NonIntentionalBaseOnBalls(36, 7);
+            double wOBA = ((0.72 * nonIntentionalWalks) + (0.75 * 6) + (0.90 * singles) + (0.92 * 0) + (1.24 * 29) + (1.56 * 8) + (1.95 * 13)) / plateAppearances;
+
+            Assert.AreEqual(RetVal, wOBA, 1E-10);
+        }
+    }
+
+    [TestClass]
+    public class WeightedRunsAboveAverage
+    {
+        // Weighted Runs Above Average = ((wOBA – lgwOBA)/wOBA Scale) * PA
+        [TestMethod]
+        public void WeightedRunsAboveAverageDivideByZero()
+        {
+            double RetVal = AdvancedStats.WeightedRunsAboveAverage(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+            Assert.AreEqual(RetVal, 0);
+        }
+
+        [TestMethod]
+        public void WeightedRunsAboveAverageValid()
+        {
+            double RetVal = AdvancedStats.WeightedRunsAboveAverage(.100, .200, 2, 1, 1, 4, 0, 1, 1, 1, 8, 1, 1, 0);
+            double weightedOnBaseAverage = AdvancedStats.WeightedOnBaseAverage(2, 1, 1, 4, 0, 1, 1, 1, 8, 1, 1, 0);
+            double plateAppearances = BasicStats.PlateAppearances(8, 2, 1, 1, 1, 0);
+
+            Assert.AreEqual(RetVal, (((weightedOnBaseAverage - .100) / .200) * plateAppearances), 1E-10);
+        }
+
+        [TestMethod]
+        public void WeightedRunsAboveAverageValidLarge()
+        {
+            double RetVal = AdvancedStats.WeightedRunsAboveAverage(.450, 4, 50, 4, 5, 200, 4, 20, 5, 20, 700, 4, 2, 2);
+            double weightedOnBaseAverage = AdvancedStats.WeightedOnBaseAverage(50, 4, 5, 200, 4, 20, 5, 20, 700, 4, 2, 2);
+            double plateAppearances = BasicStats.PlateAppearances(700, 50, 5, 4, 2, 2);
+
+            Assert.AreEqual(RetVal, (((weightedOnBaseAverage - .450) / 4) * plateAppearances), 1E-10);
+        }
+    }
+
     [TestClass]
     public class EarnedRunAverageStatsTest
     {
@@ -705,6 +784,59 @@ namespace BaseballAverageStatsTest
             double RetVal = PitchingStats.OpponentsBattingAverage(120, 670);
             Assert.AreEqual(RetVal, (120 / 670.0), 1E-10);
         }
+    }
+
+    [TestClass]
+    public class RunAverageStatsTest
+    {
+        //Run Average = runs scored * 9 / innings pitched
+        [TestMethod]
+        public void RunAverageDivideByZero()
+        {
+            double RetVal = PitchingStats.RunAverage(1, 0);
+            Assert.AreEqual(RetVal, 0);
+        }
+
+        [TestMethod]
+        public void RunAverageValid()
+        {
+            double RetVal = PitchingStats.RunAverage(1, 9);
+            Assert.AreEqual(RetVal, ((1 * 9.0) / 9), 1E-10);
+        }
+
+        [TestMethod]
+        public void RunAverageValidLarge()
+        {
+            double RetVal = PitchingStats.RunAverage(200, 1700);
+            Assert.AreEqual(RetVal, ((200 * 9.0) / 1700), 1E-10);
+        }
+    }
+
+    [TestClass]
+    public class WalksPlusHitsPerInningsPitchedStatsTest
+    {
+        //Walks Plus Hits Per Inning Pitched = (H+BB)/IP
+        [TestMethod]
+        public void WalksPlusHitsPerInningsPitchedDivideByZero()
+        {
+            double RetVal = PitchingStats.WalksPlusHitsPerInningPitched(1, 1, 0);
+            Assert.AreEqual(RetVal, 0);
+        }
+
+        [TestMethod]
+        public void WalksPlusHitsPerInningsPitchedValid()
+        {
+            double RetVal = PitchingStats.WalksPlusHitsPerInningPitched(1, 1, 1);
+            Assert.AreEqual(RetVal, ((1 + 1.0) / 1), 1E-10);
+        }
+
+        [TestMethod]
+        public void WalksPlusHitsPerInningsPitchedValidLarge()
+        {
+            double RetVal = PitchingStats.WalksPlusHitsPerInningPitched(100, 50, 300);
+            Assert.AreEqual(RetVal, ((100 + 50.0) / 300), 1E-10);
+        }
+
     }
 }
 

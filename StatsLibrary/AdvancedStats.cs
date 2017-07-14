@@ -67,5 +67,27 @@ namespace StatsLibrary
             double OPS = BasicStats.OnBasePlusSlugging(hits, walks, hitByPitch, atBats, sacFly, doubles, triples, homeRuns);
             return ((1.8 * OPS) / 4);
         }
+
+        // wOBA
+        // Weighted on base average = ((0.72 * NIBB) + (0.75 * HBP) + (0.90 * 1B) + (0.92 * RBOE) + (1.24 * 2B) + (1.56 * 3B) + (1.95 * HR)) / PA
+        public static double WeightedOnBaseAverage(int walks, int intentionalWalks, int hitByPitch, int hits, int reachedBaseOnError, int doubles, int triples, int homeRuns, int atBats, int sacHit, int sacFly, int reachedOnDefensiveInterference)
+        {
+            double plateAppearances = BasicStats.PlateAppearances(atBats, walks, hitByPitch, sacHit, sacFly, reachedOnDefensiveInterference);
+            double singles = BasicStats.Singles(hits, doubles, triples, homeRuns);
+            double nonIntentionalWalks = BasicStats.NonIntentionalBaseOnBalls(walks, intentionalWalks);
+            double wOBA = ((0.72 * nonIntentionalWalks) + (0.75 * hitByPitch) + (0.90 * singles) + (0.92 * reachedBaseOnError) + (1.24 * doubles) + (1.56 * triples) + (1.95 * homeRuns)) / plateAppearances;
+
+            return plateAppearances != 0 ? wOBA : 0.0;
+        }
+
+        // wRAA
+        // Weighted Runs Above Average = ((wOBA – lgwOBA)/wOBA Scale) * PA
+        public static double WeightedRunsAboveAverage(double leagueWideOnBaseAverage, double weightedOnBaseAverageScale, int walks, int intentionalWalks, int hitByPitch, int hits, int reachedBaseOnError, int doubles, int triples, int homeRuns, int atBats, int sacHit, int sacFly, int reachedOnDefensiveInterference)
+        {
+            double plateAppearances = BasicStats.PlateAppearances(atBats, walks, hitByPitch, sacHit, sacFly, reachedOnDefensiveInterference);
+            double weightedOnBaseAverage = AdvancedStats.WeightedOnBaseAverage(walks, intentionalWalks, hitByPitch, hits, reachedBaseOnError, doubles, triples, homeRuns, atBats, sacHit, sacFly, reachedOnDefensiveInterference);
+
+            return weightedOnBaseAverageScale != 0 ? (((weightedOnBaseAverage - leagueWideOnBaseAverage) / weightedOnBaseAverageScale) * plateAppearances) : 0.0;
+        }
     }
 }
