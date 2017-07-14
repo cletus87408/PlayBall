@@ -5,6 +5,42 @@ using StatsLibrary;
 namespace BaseballAverageStatsTest
 {
     [TestClass]
+    public class SinglesStatsTest
+    {
+        // Singles = H - 2B - 3B - HR
+        [TestMethod]
+        public void SinglesValid()
+        {
+            double RetVal = BasicStats.Singles(8, 1, 1, 1);
+            Assert.AreEqual(RetVal, (8.0 - 1 - 1 - 1), 1E-10);
+        }
+
+        [TestMethod]
+        public void SinglesValidLarge() //using ichiro 2003
+        {
+            double RetVal = BasicStats.Singles(212, 29, 8, 13);
+            Assert.AreEqual(RetVal, (212.0 - 29 - 8 - 13), 1E-10);
+        }
+    }
+    [TestClass]
+    public class PlateAppearancesStatsTest
+    {
+        //PA = AB + BB + HBP + SH + SF + Times Reached on Defensive Interference
+        [TestMethod]
+        public void PlateAppearancesValid()
+        {
+            double RetVal = BasicStats.PlateAppearances(1, 1, 1, 1, 1, 1);
+            Assert.AreEqual(RetVal, (1.0 + 1 + 1 + 1 + 1 + 1), 1E-10);
+        }
+
+        [TestMethod]
+        public void PlateAppearancesValidLarge() //used ichiro 2003
+        {
+            double RetVal = BasicStats.PlateAppearances(679, 36, 6, 3, 1, 0);
+            Assert.AreEqual(RetVal, (679.0 + 36 + 6 + 3 + 1 + 0), 1E-10);
+        }
+    }
+    [TestClass]
     public class BattingAverageStatsTest
     {
         //Batting Average = H / AB
@@ -86,26 +122,27 @@ namespace BaseballAverageStatsTest
     public class PlateAppearancesPerStrikeoutStatsTest
     {
         //Plate Appearances Per Strikeout = PA / K
+        //PA = AB + BB + HBP + SH + SF + Times Reached on Defensive Interference
 
         [TestMethod]
         public void PlateAppearancesPerStrikeoutDivideByZero()
         {
-            double RetVal = BasicStats.PlateAppearancesPerStrikeout(1, 0);
+            double RetVal = BasicStats.PlateAppearancesPerStrikeout(1, 1, 1, 1, 1, 1, 0);
             Assert.AreEqual(RetVal, 0); //Function Returns 0.0 for Divide by Zero
         }
 
         [TestMethod]
         public void PlateAppearancesPerStrikeoutValid()
         {
-            double RetVal = BasicStats.PlateAppearancesPerStrikeout(2, 1);
-            Assert.AreEqual(RetVal, (2.0 / 1), 1E-10);
+            double RetVal = BasicStats.PlateAppearancesPerStrikeout(1, 1, 1, 1, 1, 0, 1);
+            Assert.AreEqual(RetVal, ((1.0 + 1 + 1 + 1 + 1 + 0) / 1), 1E-10);
         }
 
         [TestMethod]
         public void PlateAppearancesPerStrikeoutValidLarge()
         {
-            double RetVal = BasicStats.PlateAppearancesPerStrikeout(3000, 500);
-            Assert.AreEqual(RetVal, (3000.0 / 500), 1E-10);
+            double RetVal = BasicStats.PlateAppearancesPerStrikeout(500, 150, 10, 5, 10, 1, 500);
+            Assert.AreEqual(RetVal, ((500.0 + 150 + 10 + 5 + 10 + 1) / 500), 1E-10);
         }
     }
     [TestClass]
@@ -116,14 +153,14 @@ namespace BaseballAverageStatsTest
         [TestMethod]
         public void TBValid()
         {
-            double RetVal = BasicStats.TotalBases(1, 1, 1, 1);
+            double RetVal = BasicStats.TotalBases(4, 1, 1, 1);
             Assert.AreEqual(RetVal, (1.0 + (1 * 2) + (1 * 3) + (1 * 4)), 1E-10);
         }
 
         [TestMethod]
         public void TBValidLarge()
         {
-            double RetVal = BasicStats.TotalBases(10, 10, 10, 10);
+            double RetVal = BasicStats.TotalBases(40, 10, 10, 10);
             Assert.AreEqual(RetVal, (10.0 + (10 * 2) + (10 * 3) + (10 * 4)), 1E-10);
         }
     }
@@ -163,14 +200,14 @@ namespace BaseballAverageStatsTest
         [TestMethod]
         public void SLGValid()
         {
-            double RetVal = BasicStats.SluggingPercentage(1, 1, 1, 1, 8);
+            double RetVal = BasicStats.SluggingPercentage(4, 1, 1, 1, 8);
             Assert.AreEqual(RetVal, ((1 + (1 * 2) + (1 * 3) + (1 * 4)) / 8.0), 1E-10);
         }
 
         [TestMethod]
         public void SLGValidLarge()
         {
-            double RetVal = BasicStats.SluggingPercentage(10, 10, 10, 10, 200);
+            double RetVal = BasicStats.SluggingPercentage(40, 10, 10, 10, 200);
             Assert.AreEqual(RetVal, ((10 + (10 * 2) + (10 * 3) + (10 * 4)) / 200.0), 1E-10);
         }
     }
@@ -183,21 +220,21 @@ namespace BaseballAverageStatsTest
         [TestMethod]
         public void TADivideByZero()
         {
-            double RetVal = BasicStats.TotalAverage(1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0);
+            double RetVal = BasicStats.TotalAverage(1, 1, 1, 1, 1, 1, 0, 0, 0, 0);
             Assert.AreEqual(RetVal, 0); //Function Returns 0.0 for Divide by Zero
         }
 
         [TestMethod]
         public void TAValid()
         {
-            double RetVal = BasicStats.TotalAverage(1, 1, 1, 1, 1, 1, 1, 8, 4, 1, 1);
+            double RetVal = BasicStats.TotalAverage(1, 1, 1, 1, 1, 1, 8, 4, 1, 1);
             Assert.AreEqual(RetVal, ((10 + 1 + 1 + 1 - 1) / (8 - 4 + 1 + 1.0)), 1E-10);
         }
 
         [TestMethod]
         public void TAValid_Large()
         {
-            double RetVal = BasicStats.TotalAverage(10, 10, 10, 10, 10, 10, 10, 400, 40, 10, 5);
+            double RetVal = BasicStats.TotalAverage(10, 10, 10, 10, 10, 10, 400, 40, 10, 5);
             Assert.AreEqual(RetVal, ((100 + 10 + 10 + 10 - 10) / (400 - 40 + 10 + 5.0)), 1E-10);
         }
 
@@ -274,19 +311,19 @@ namespace BaseballAverageStatsTest
     public class OnBasePlusSluggingStatsTest
     {
         //On Base Plus Slugging = Slugging Percentage + On Base Percentage
-        // ((1B + (2B * 2) + (3B * 3) + (4B * 4))/AB) + ((H + BB + HBP)/(AB + BB + HBP + SF))  
+        //((1B + (2B * 2) + (3B * 3) + (4B * 4))/AB) + ((H + BB + HBP)/(AB + BB + HBP + SF))  
 
         [TestMethod]
         public void OnBasePlusSluggingValid()
         {
-            double RetVal = BasicStats.OnBasePlusSlugging(1, 1, 1, 1, 1, 1, 1, 1, 1);
-            Assert.AreEqual(RetVal, ((1.0 + 2 + 3 + 4) / 1) + ((1 + 1 + 1) / (1 + 1 + 1 + 1.0)), 1E-10);
+            double RetVal = BasicStats.OnBasePlusSlugging(4, 1, 1, 1, 1, 1, 1, 1);
+            Assert.AreEqual(RetVal, ((1.0 + 2 + 3 + 4) / 1) + ((4 + 1 + 1) / (1 + 1 + 1 + 1.0)), 1E-10);
         }
 
         [TestMethod]
         public void OnBasePlusSluggingValidLarge() //used ichiro 2003
         {
-            double RetVal = BasicStats.OnBasePlusSlugging(212, 36, 6, 679, 1, 162, 29, 8, 13);
+            double RetVal = BasicStats.OnBasePlusSlugging(212, 36, 6, 679, 1, 29, 8, 13);
             Assert.AreEqual(RetVal, ((162 + (29 * 2.0) + (8 * 3.0) + (13 * 4.0)) / 679.0) + ((212 + 36 + 6) / (679 + 36 + 6 + 1.0)), 1E-10);
         }
     }
@@ -424,21 +461,21 @@ namespace BaseballAverageStatsTest
         [TestMethod]
         public void RCDivideByZero()
         {
-            double RetVal = AdvancedStats.RunsCreated(1, 1, 1, 1, 0, 0, 1);
+            double RetVal = AdvancedStats.RunsCreated(1, 1, 1, 0, 0, 1);
             Assert.AreEqual(RetVal, 0); //function returns 0.0 for divide by zero
         }
 
         [TestMethod]
         public void RCValid()
         {
-            double RetVal = AdvancedStats.RunsCreated(1, 1, 1, 1, 1, 8, 4);
+            double RetVal = AdvancedStats.RunsCreated(1, 1, 1, 1, 8, 4);
             Assert.AreEqual(RetVal, ((4 + 1) * 10) / (8 + 1.0), 1E-10);
         }
 
         [TestMethod]
         public void RCValidLarge()
         {
-            double RetVal = AdvancedStats.RunsCreated(10, 10, 10, 10, 10, 80, 40);
+            double RetVal = AdvancedStats.RunsCreated(10, 10, 10, 10, 80, 40);
             Assert.AreEqual(RetVal, (((40 + 10) * 100) / (80 + 10.0)), 1E-10);
         }
     }
@@ -451,14 +488,14 @@ namespace BaseballAverageStatsTest
         [TestMethod]
         public void XRValid()
         {
-            double RetVal = AdvancedStats.ExtrapolatedRuns(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-            Assert.AreEqual(RetVal, ((.50 * 1) + (.72 * 1) + (1.04 * 1) + (1.44 * 1) + (.34 * (1+1-1)) + (.25 * 1) + (.18 * 1) + (-.32 * 1) +( -.090 * (1-1-1)) + (-.098 * 1) + (-.37 * 1) + (.37 * 1) + (.04 * 1)), 1E-10);
+            double RetVal = AdvancedStats.ExtrapolatedRuns(1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 1, 1, 1, 1);
+            Assert.AreEqual(RetVal, ((.50 * 1) + (.72 * 1) + (1.04 * 1) + (1.44 * 1) + (.34 * (1+1-1)) + (.25 * 1) + (.18 * 1) + (-.32 * 1) +( -.090 * (1-4-1)) + (-.098 * 1) + (-.37 * 1) + (.37 * 1) + (.04 * 1)), 1E-10);
         }
 
         [TestMethod]
         public void XRValidLarge() //test with Mark McGwire's 1998 data
         {
-            double RetVal = AdvancedStats.ExtrapolatedRuns(61, 21, 0, 70, 6, 162, 28, 1, 0, 509, 152, 155, 8, 4, 0);
+            double RetVal = AdvancedStats.ExtrapolatedRuns(21, 0, 70, 6, 162, 28, 1, 0, 509, 152, 155, 8, 4, 0);
             Assert.AreEqual(RetVal, ((.50 * 61) + (.72 * 21) + (1.04 * 0) + (1.44 * 70) + (.34 * (6 + 162 - 28)) + (.25 * 28) + (.18 * 1) + (-.32 * 0) + (-.090 * (509 - 152 - 155)) + (-.098 * 155) + (-.37 * 8) + (.37 * 4) + (.04 * 0)), 1E-10);
         }
     }
@@ -471,25 +508,76 @@ namespace BaseballAverageStatsTest
         [TestMethod]
         public void EqADivideByZero()
         {
-            double RetVal = AdvancedStats.EquivalentAverage(4, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0);
+            double RetVal = AdvancedStats.EquivalentAverage(4, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0);
             Assert.AreEqual(RetVal, 0);
         }
 
         [TestMethod]
         public void EqAValid()
         {
-            double RetVal = AdvancedStats.EquivalentAverage(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
-            Assert.AreEqual(RetVal, ((1 + 10 + (1.5) * (1 + 1) + 1 + 1 + 1) / (1 + 1 + 1 + 1 + 1 + 1 + (1.0/3) )), 1E-10);
+            double RetVal = AdvancedStats.EquivalentAverage(4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+            Assert.AreEqual(RetVal, ((4 + 10 + (1.5) * (1 + 1) + 1 + 1 + 1) / (1 + 1 + 1 + 1 + 1 + 1 + (1.0/3) )), 1E-10);
         }
 
         [TestMethod]
         public void EqAValidLarge() //used Ichiro 2003
         {
-            double RetVal = AdvancedStats.EquivalentAverage(212, 162, 29, 8, 13, 36, 6, 34, 3, 1, 679, 8);
+            double RetVal = AdvancedStats.EquivalentAverage(212, 29, 8, 13, 36, 6, 34, 3, 1, 679, 8);
             Assert.AreEqual(RetVal, ((212 + 296 + 1.5 * (36 + 6) + 34 + 3 + 1.0) / (679 + 36 + 6 + 3 + 1 + 8 + (34 / 3.0))), 1E-10);
         }
     }
 
+    [TestClass]
+    public class BaseRunsStatsTest
+    {
+        //BsR (Base Runs) = (A*B)/(B+C)+D
+        //where A= H + BB - HR, B = (1.4 * TB - 0.6 * H - 3 * HR + 0.1 * BB) * 1.02, C = AB - H, D = HR
+
+        [TestMethod]
+        public void BaseRunsDivideByZero()
+        {
+            double RetVal = AdvancedStats.BaseRuns(0, 0, 0, 0, 0, 0);
+            Assert.AreEqual(RetVal, 0);
+        }
+
+        [TestMethod]
+        public void BaseRunsValid()
+        {
+            double totalBases = BasicStats.TotalBases(4, 1, 1, 1);
+            double RetVal = AdvancedStats.BaseRuns(4, 1, 1, 1, 1, 8);
+            int A = (4 + 1 - 1); //H + BB - HR
+            int C = (8 - 4); //AB - H
+            double B = ((1.4 * totalBases - 0.6 * 4 - 3 * 1 + 0.1 * 1) *1.02); //(1.4 * TB - 0.6 * H - 3 * HR + 0.1 * BB) * 1.02
+
+            Assert.AreEqual(RetVal, (((A * B) / (B + C)) + 1.0), 1E-10); //BR (Base Runs) = (A*B)/(B+C) + HR
+        }
+
+        [TestMethod]
+        public void BaseRunsValidLarge() //using ichiro 2003
+        {
+            double totalBases = BasicStats.TotalBases(212, 29, 8, 13);
+            double RetVal = AdvancedStats.BaseRuns(212, 36, 13, 29, 8, 679);
+            int A = (212 + 36 - 13); //H + BB - HR
+            int C = (679 - 212); //AB - H
+            double B = ((1.4 * totalBases - 0.6 * 212 - 3 * 13 + 0.1 * 36) * 1.02); //(1.4 * TB - 0.6 * H - 3 * HR + 0.1 * BB) * 1.02
+
+            Assert.AreEqual(RetVal, (((A * B) / (B + C)) + 13.0), 1E-10); //BR (Base Runs) = (A*B)/(B+C) + HR
+        }
+    }
+
+    [TestClass]
+    public class GrossProductionAverageStatsTest
+    {
+        // Gross Production Average = (1.8 * OPS) / 4
+
+        [TestMethod]
+        public void GrossProductionAverageValid()
+        {
+            double RetVal = AdvancedStats.GrossProductionAverage(1, 1, 1, 1, 1, 1, 1, 1);
+            double OPS = BasicStats.OnBasePlusSlugging(1, 1, 1, 1, 1, 1, 1, 1);
+            Assert.AreEqual(RetVal, ((1.8 * OPS) / 4), 1E-10);
+        }
+    }
     [TestClass]
     public class EarnedRunAverageStatsTest
     {
@@ -539,7 +627,7 @@ namespace BaseballAverageStatsTest
     [TestClass]
     public class StrikeoutsPerNineInningsStatsTest
     {
-        //Strikeouts Per Nine Innings = K / 9 innings
+        // Strikeouts Per Nine Innings = K / 9 innings
         [TestMethod]
         public void StrikeoutsPerNineInningsValid()
         {

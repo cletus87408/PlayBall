@@ -8,32 +8,44 @@ namespace StatsLibrary
 {
     public static class PitchingStats
     {
-        public static double EarnedRunAverage(int runs, double inningsPitched) // ERA
+        // ERA
+        // Earned Run Average = Earned Runs * 9 / Innings
+        public static double EarnedRunAverage(int runs, double inningsPitched) 
         {
             return inningsPitched != 0 ? ((9.0 * runs) / inningsPitched) : 0.0;
         }
 
-        public static double BaseOnBallsPerNineInnings(int walks) // BB/9
+        // BB/9
+        // Base On Balls Per Nine Innings = BB / 9 innings
+        public static double BaseOnBallsPerNineInnings(int walks) 
         {
             return (walks / 9.0);
         }
 
-        public static double StrikeoutsPerNineInnings(int strikeouts) // K/9
+        // K/9
+        // Strikeouts Per Nine Innings = K / 9 innings
+        public static double StrikeoutsPerNineInnings(int strikeouts) 
         {
             return (strikeouts / 9.0);
         }
 
-        public static double HitsPerNineInnings(int hits) // H/9
+        // H/9
+        // Hits Per Nine Innings = Hits/9 innings
+        public static double HitsPerNineInnings(int hits) 
         {
             return (hits / 9.0);
         }
 
-        public static double InningsPitchedPerGamesStarted(int gamesStarted, double inningsPitched) // IP/GS
+        // IP/GS
+        // Innings Pitched Per Game Started = Innings/Games Started
+        public static double InningsPitchedPerGamesStarted(int gamesStarted, double inningsPitched) 
         {
             return (inningsPitched / gamesStarted);
         }
 
-        public static double OpponentsBattingAverage(int hitsAllowed, int atBatsFaced) // OBA
+        // OBA
+        // Opponent Batting Average = hits allowed/ atbats faced
+        public static double OpponentsBattingAverage(int hitsAllowed, int atBatsFaced) 
         {
             return atBatsFaced != 0 ? (hitsAllowed / (1.0 * atBatsFaced)) : 0.0;
         }
