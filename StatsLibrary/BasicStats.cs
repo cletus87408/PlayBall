@@ -51,10 +51,10 @@ namespace StatsLibrary
             double totalBases = BasicStats.TotalBases(singles, doubles, triples, homeRuns);
             int denominator = (atBats - hits + caughtStealing + groundedIntoDoublePlay);
 
-            return denominator != 0 ? (totalBases + hitByPitch + walks + stolenBases) / (1.0 * denominator) : 0.0;
+            return denominator != 0 ? (totalBases + hitByPitch + walks + stolenBases - caughtStealing) / (1.0 * denominator) : 0.0;
         }
 
-        public static double TimesOnBase(int hits, int walks, int hitByPitch)
+        public static double TimesOnBase(int hits, int walks, int hitByPitch) //TOB
         {
             return (1.0 * hits + walks + hitByPitch);
         }
@@ -64,6 +64,20 @@ namespace StatsLibrary
             return (1.0 * doubles + triples + homeRuns);
         }
 
+        public static double OnBasePercentage(int hits, int walks, int hitByPitch, int atBats, int sacFly) // OBP
+        {
+            int denominator = (atBats + walks + hitByPitch + sacFly);
+
+            return denominator != 0 ? (hits + walks + hitByPitch) / (1.0 * denominator) : 0.0;
+        }
+
+        public static double OnBasePlusSlugging(int hits, int walks, int hitByPitch, int atBats, int sacFly, int singles, int doubles, int triples, int homeRuns) // OPS
+        {
+            double slugging = BasicStats.SluggingPercentage(singles, doubles, triples, homeRuns, atBats);
+            double onBase = BasicStats.OnBasePercentage(hits, walks, hitByPitch, atBats, sacFly);
+
+            return (slugging + onBase);
+        }
         //BaseRunning
         public static double StolenBasePercentage(int stolenBases, int stolenBasesAttempted) //SB%
         {

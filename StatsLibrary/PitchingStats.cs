@@ -17,5 +17,25 @@ namespace StatsLibrary
         {
             return (walks / 9.0);
         }
+
+        public static double StrikeoutsPerNineInnings(int strikeouts) // K/9
+        {
+            return (strikeouts / 9.0);
+        }
+
+        public static double HitsPerNineInnings(int hits) // H/9
+        {
+            return (hits / 9.0);
+        }
+
+        public static double InningsPitchedPerGamesStarted(int gamesStarted, double inningsPitched) // IP/GS
+        {
+            return (inningsPitched / gamesStarted);
+        }
+
+        public static double OpponentsBattingAverage(int hitsAllowed, int atBatsFaced) // OBA
+        {
+            return atBatsFaced != 0 ? (hitsAllowed / (1.0 * atBatsFaced)) : 0.0;
+        }
     }
 }
