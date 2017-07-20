@@ -61,29 +61,30 @@ namespace LahmanStats
         /// <returns>IEnumerable&lt;IStatsAck&gt;.</returns>
         private IEnumerable<IStatsAck> ComputeForIndividual(IEnumerable<string> identifiers, DateTime start, DateTime stop)
         {
-            List<IStatsAck> retVal = new List<IStatsAck>();
-
+            // For every player in the list...
             foreach (string id in identifiers)
             {
+                // Find the players entries in the batting database
                 var playerRows = from row in this.database.Battings where row.playerID == id select row;
+                // Find those rows from the players entries that match the years requested 
+                // Note that for the Lahman database, time granularity is by year
                 var matchingRows = from row in playerRows 
                     where row.yearID >= start.Year
                     where row.yearID <= stop.Year
                     select row;
 
+                // Did we find any matches?
                 if (matchingRows.Any())
                 {
                     foreach (var row in matchingRows)
                     {
+                        // Make one return value for every matching entry, using the stats library to compute the BA
                         StatsAck thisStat = new StatsAck {Identifier = id, Start = start, Stop = stop, Target = StatsTarget.Individual};
                         thisStat.Value = BasicStats.BattingAverage(atBats:row.AB.Value, hits:row.H.Value);
+                        yield return thisStat;
                     }
                 }
-
-                // TODO: Also need an aggregate for each player for the entire time period requested, but not yet implemented
             }
-
-            return retVal;
         }
 
         /// <summary>

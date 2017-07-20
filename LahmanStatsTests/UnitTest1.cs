@@ -35,9 +35,13 @@ namespace LahmanStatsTests
 
             var retVals = retVal.ToArray();
 
+            // Should be one result per year requested (2005, 2006)
             Assert.AreEqual(retVals.Length, 2);
-            Assert.AreEqual(retVals[0].Value, 0.0);
-            Assert.AreEqual(retVals[1].Value, 0.0);
+
+            // Note relaxed spec on equality.  Just checking BA meets expectation to within 3 digits.
+            // Good enough to prove that I'm pulling the correct data for the given years
+            Assert.AreEqual(retVals[0].Value, 0.303, 1E-3);
+            Assert.AreEqual(retVals[1].Value, 0.322, 1E-3);
         }
     }
 }
