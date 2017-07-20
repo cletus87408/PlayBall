@@ -79,7 +79,7 @@ namespace LahmanStats
                     foreach (var row in matchingRows)
                     {
                         // Make one return value for every matching entry, using the stats library to compute the BA
-                        StatsAck thisStat = new StatsAck {Identifier = id, Start = start, Stop = stop, Target = StatsTarget.Individual};
+                        StatsAck thisStat = new StatsAck {Identifier = id, Start = new DateTime(row.yearID, 1, 1), Stop = new DateTime(row.yearID, 1, 1) , Target = StatsTarget.Individual};
                         thisStat.Value = BasicStats.BattingAverage(atBats:row.AB.Value, hits:row.H.Value);
                         yield return thisStat;
                     }

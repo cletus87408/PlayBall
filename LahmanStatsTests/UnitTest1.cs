@@ -42,6 +42,17 @@ namespace LahmanStatsTests
             // Good enough to prove that I'm pulling the correct data for the given years
             Assert.AreEqual(retVals[0].Value, 0.303, 1E-3);
             Assert.AreEqual(retVals[1].Value, 0.322, 1E-3);
+
+            Assert.AreEqual(retVals[0].Identifier, "suzukic01");
+            Assert.AreEqual(retVals[1].Identifier, "suzukic01");
+
+            Assert.AreEqual(retVals[0].Start, new DateTime(2005, 1, 1));
+            Assert.AreEqual(retVals[0].Stop, new DateTime(2005, 1, 1));
+            Assert.AreEqual(retVals[1].Start, new DateTime(2006, 1, 1));
+            Assert.AreEqual(retVals[1].Stop, new DateTime(2006, 1, 1));
+
+            Assert.AreEqual(retVals[0].Target, StatsTarget.Individual);
+            Assert.AreEqual(retVals[1].Target, StatsTarget.Individual);
         }
     }
 }
