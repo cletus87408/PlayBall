@@ -44,7 +44,7 @@ namespace StatsManager
     /// <summary>
     /// Interface StatsReturnType.  This is the class that the stats computations will return
     /// </summary>
-    public interface StatsReturnType
+    public interface IStatsAck
     {
         /// <summary>
         /// Gets the identifier.
@@ -80,7 +80,7 @@ namespace StatsManager
     /// <summary>
     /// Interface Interfaces
     /// </summary>
-    public interface StatsPlugin
+    public interface IStatsPlugin
     {
         /// <summary>
         /// Gets the name of the stat.  The name should be reasonably descriptive, full language text
@@ -103,12 +103,6 @@ namespace StatsManager
         string Explanation { get; }
 
         /// <summary>
-        /// Gets the target for this stat.
-        /// </summary>
-        /// <value>The target.</value>
-        StatsTarget Target { get; }
-
-        /// <summary>
         /// Gets the metadata.  Metadata is undefined for a stat, but might provide useful information
         /// for a GUI or a means of supplying stat specific knowledge.  This is mostly a hedge against
         /// unknown future needs (for now).
@@ -129,6 +123,6 @@ namespace StatsManager
         /// of the PlayBall project, we expect to be adding stats on a per-game basis, hence the need for start/stop instead of just
         /// year for the duration</param>
         /// <returns>An enumerable collection of return values, one for each input identifier.</returns>
-        IEnumerable<StatsReturnType> Compute(IEnumerable<string> identifier, StatsTarget target, DateTime start, DateTime stop);
+        IEnumerable<IStatsAck> Compute(IEnumerable<string> identifier, StatsTarget target, DateTime start, DateTime stop);
     }
 }

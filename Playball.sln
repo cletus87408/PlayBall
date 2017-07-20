@@ -11,6 +11,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseballAverageStatsTest", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StatsManager", "StatsManager\StatsManager.csproj", "{ABEEE339-756C-47AB-AEAA-D339DFD16CF8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LahmanStats", "..\LahmanStats\LahmanStats.csproj", "{866FDE38-5752-4D83-BE16-5BF911C98E14}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LahmanStatsTests", "LahmanStatsTests\LahmanStatsTests.csproj", "{A8D6C282-2CE1-46E1-A851-0A7863EC4C74}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +37,14 @@ Global
 		{ABEEE339-756C-47AB-AEAA-D339DFD16CF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ABEEE339-756C-47AB-AEAA-D339DFD16CF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ABEEE339-756C-47AB-AEAA-D339DFD16CF8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{866FDE38-5752-4D83-BE16-5BF911C98E14}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{866FDE38-5752-4D83-BE16-5BF911C98E14}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{866FDE38-5752-4D83-BE16-5BF911C98E14}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{866FDE38-5752-4D83-BE16-5BF911C98E14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8D6C282-2CE1-46E1-A851-0A7863EC4C74}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8D6C282-2CE1-46E1-A851-0A7863EC4C74}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8D6C282-2CE1-46E1-A851-0A7863EC4C74}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8D6C282-2CE1-46E1-A851-0A7863EC4C74}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
