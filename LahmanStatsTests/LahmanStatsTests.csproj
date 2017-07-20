@@ -63,7 +63,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\LahmanStats\LahmanStats.csproj">
+    <ProjectReference Include="..\LahmanStats\LahmanStats.csproj">
       <Project>{866fde38-5752-4d83-be16-5bf911c98e14}</Project>
       <Name>LahmanStats</Name>
     </ProjectReference>

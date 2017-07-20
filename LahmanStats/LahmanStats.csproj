@@ -53,15 +53,15 @@
     <Compile Include="StatsAck.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PlayBall\PlayBall.csproj">
+    <ProjectReference Include="..\PlayBall.csproj">
       <Project>{09DD59E9-197F-4C19-A11D-30A743231EE6}</Project>
       <Name>PlayBall</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PlayBall\StatsLibrary\StatsLibrary.csproj">
+    <ProjectReference Include="..\StatsLibrary\StatsLibrary.csproj">
       <Project>{33BF1907-FED8-4A20-A155-D9ADAB5F80A0}</Project>
       <Name>StatsLibrary</Name>
     </ProjectReference>
-    <ProjectReference Include="..\PlayBall\StatsManager\StatsManager.csproj">
+    <ProjectReference Include="..\StatsManager\StatsManager.csproj">
       <Project>{ABEEE339-756C-47AB-AEAA-D339DFD16CF8}</Project>
       <Name>StatsManager</Name>
     </ProjectReference>
