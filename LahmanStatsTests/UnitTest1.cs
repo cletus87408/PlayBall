@@ -55,6 +55,62 @@ namespace LahmanStatsTests
             Assert.AreEqual(retVals[1].Target, StatsTarget.Individual);
         }
 
+        public void TestSingleIndividualSingles()
+        {
+            Singles s = new Singles(database);
+
+            var retVal = s.Compute(new List<string> { "suzukic01" }, StatsTarget.Individual, new DateTime(2005, 1, 1),
+                new DateTime(2006, 1, 1));
+
+            var retVals = retVal.ToArray();
+
+            // Should be one result per year requested (2005, 2006)
+            Assert.AreEqual(retVals.Length, 2);
+
+            // 
+            Assert.AreEqual(retVals[0].Value, 158.0, 1E-3);
+            Assert.AreEqual(retVals[1].Value, 186.0, 1E-3);
+
+            Assert.AreEqual(retVals[0].Identifier, "suzukic01");
+            Assert.AreEqual(retVals[1].Identifier, "suzukic01");
+
+            Assert.AreEqual(retVals[0].Start, new DateTime(2005, 1, 1));
+            Assert.AreEqual(retVals[0].Stop, new DateTime(2005, 1, 1));
+            Assert.AreEqual(retVals[1].Start, new DateTime(2006, 1, 1));
+            Assert.AreEqual(retVals[1].Stop, new DateTime(2006, 1, 1));
+
+            Assert.AreEqual(retVals[0].Target, StatsTarget.Individual);
+            Assert.AreEqual(retVals[1].Target, StatsTarget.Individual);
+        }
+
+        [TestMethod]
+        public void TestSingleIndividualPlateAppearances()
+        {
+            PlateAppearances pa = new PlateAppearances(database);
+
+            var retVal = pa.Compute(new List<string> { "suzukic01" }, StatsTarget.Individual, new DateTime(2005, 1, 1), new DateTime(2006, 1, 1));
+
+            var retVals = retVal.ToArray();
+
+            // Should be one result per year requested (2005, 2006)
+            Assert.AreEqual(retVals.Length, 2);
+
+
+            Assert.AreEqual(retVals[0].Value, 739.0, 1E-3);
+            Assert.AreEqual(retVals[1].Value, 752.0, 1E-3);
+
+            Assert.AreEqual(retVals[0].Identifier, "suzukic01");
+            Assert.AreEqual(retVals[1].Identifier, "suzukic01");
+
+            Assert.AreEqual(retVals[0].Start, new DateTime(2005, 1, 1));
+            Assert.AreEqual(retVals[0].Stop, new DateTime(2005, 1, 1));
+            Assert.AreEqual(retVals[1].Start, new DateTime(2006, 1, 1));
+            Assert.AreEqual(retVals[1].Stop, new DateTime(2006, 1, 1));
+
+            Assert.AreEqual(retVals[0].Target, StatsTarget.Individual);
+            Assert.AreEqual(retVals[1].Target, StatsTarget.Individual);
+        }
+
         [TestMethod]
         public void TestSingleTeamBA()
         {

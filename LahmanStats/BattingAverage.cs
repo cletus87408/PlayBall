@@ -183,13 +183,10 @@ namespace LahmanStats
             {
                 case StatsTarget.Individual:
                     return ComputeForIndividual(identifiers, start, stop);
-                    break;
                 case StatsTarget.Team:
                     return ComputeForTeam(identifiers, start, stop);
-                    break;
                 case StatsTarget.League:
                     return ComputeForLeague(identifiers, start, stop);
-                    break;
                 default: return null;
             }
         }

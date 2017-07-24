@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BattingAverage.cs" />
+    <Compile Include="PlateAppearances.cs" />
+    <Compile Include="Singles.cs" />
     <Compile Include="LahmanStatsBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatsAck.cs" />
