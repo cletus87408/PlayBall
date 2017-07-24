@@ -75,6 +75,12 @@ namespace StatsManager
         /// </summary>
         /// <value>The value.</value>
         double Value { get; }
+
+        /// <summary>
+        /// Gets the metadata for this ack.
+        /// </summary>
+        /// <value>The metadata.</value>
+        IReadOnlyDictionary<string, string> Metadata { get; }
     }
 
     /// <summary>

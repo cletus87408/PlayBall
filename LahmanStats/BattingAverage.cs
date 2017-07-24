@@ -17,6 +17,8 @@ using WpfApplication1;
 
 namespace LahmanStats
 {
+    using System.Linq.Expressions;
+
     /// <summary>
     /// Class BattingAverage.  Implements the IStatsPlugin interface for the
     /// Batting Average statistic using the Lahman database Entity Framework objects as the data source.
@@ -79,10 +81,19 @@ namespace LahmanStats
                     foreach (var row in matchingRows)
                     {
                         // Make one return value for every matching entry, using the stats library to compute the BA
-                        StatsAck thisStat = new StatsAck {Identifier = id, Start = new DateTime(row.yearID, 1, 1), Stop = new DateTime(row.yearID, 1, 1) , Target = StatsTarget.Individual};
+                        StatsAck thisStat = new StatsAck {Identifier = id, Start = new DateTime(row.yearID, 1, 1), Stop = new DateTime(row.yearID, 12, 31) , Target = StatsTarget.Individual};
                         thisStat.Value = BasicStats.BattingAverage(atBats:row.AB.Value, hits:row.H.Value);
+                        thisStat.AddMetadataItem("AtBats", row.AB.Value.ToString());
+                        thisStat.AddMetadataItem("Hits", row.H.Value.ToString());
                         yield return thisStat;
                     }
+
+                    // Exercise for the reader:  I want one more stat which is the total individual batting average over ALL of the years.  That is, if I asked for
+                    // stats for 2006, 2007, and 2008, then I want one entry for each of those years (which is the code above) plus one more summary stat for 
+                    // all three years.  You do notneed to create a new Linq query for the purpose - all of the data has been generated above, you just need 
+                    // to add a little code to save what you need for the summary statistic.  The Start and Stop of the last summary should indicate the entire
+                    // range of that summary statistic.  If there is only a single year requested, then I only want the one entry
+                    // Fill in the metadata like above, with the total atbats and hits for reference
                 }
             }
         }
@@ -96,8 +107,52 @@ namespace LahmanStats
         /// <returns>IEnumerable&lt;IStatsAck&gt;.</returns>
         private IEnumerable<IStatsAck> ComputeForTeam(IEnumerable<string> identifiers, DateTime start, DateTime stop)
         {
-            // TODO: Not yet implemented.  Will work on later
-            return null;
+            foreach (string id in identifiers)
+            {
+                // Copy for-loop iteration variable to local variable (C# lambda best-practice for loop captures)
+                string team = id;
+
+                // One stat entry for every year requested
+                foreach (var year in Enumerable.Range(start.Year, (stop.Year - start.Year) + 1))
+                {
+                    int y = year;       // Lambda capture again
+
+                    var thisSeason = this.database.Battings     // From all batters for all time
+                        .Where(row => row.teamID == team)       // Filter out our team only for the result
+                        .Where(row => row.yearID == (short)y)   // Filter by the current year
+                        .Select(row => row);                    // Return the entire row
+
+                    // Did we find any batters for team "id" for year "y"?
+                    if (thisSeason.Any())
+                    {
+                        int cumulativeAB = 0, cumulativeH = 0;
+
+                        // Yup, there were batters.  Sum all of the at-bats and all of the hits for all batters for this team for this year.  This makes up the 
+                        // team statistic for a single season
+                        thisSeason.ToList().ForEach(
+                            row =>
+                                {
+                                    cumulativeAB += row.AB.Value;
+                                    cumulativeH += row.H.Value;
+                                });
+
+                        // Construct the return object
+                        StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(y, 1, 1), Stop = new DateTime(y, 12, 31), Target = StatsTarget.Team };
+                        thisStat.Value = BasicStats.BattingAverage(atBats: cumulativeAB, hits: cumulativeH);
+                        thisStat.AddMetadataItem("AtBats", cumulativeAB.ToString());
+                        thisStat.AddMetadataItem("Hits", cumulativeH.ToString());
+
+                        yield return thisStat;
+                    }
+
+                    // Exercise for the reader:  I want one more stat which is the total team batting average over ALL of the years.  That is, if I asked for
+                    // stats for 2006, 2007, and 2008, then I want one entry for each of those years (which is the code above) plus one more summary stat for 
+                    // all three years.  You do notneed to create a new Linq query for the purpose - all of the data has been generated above, you just need 
+                    // to add a little code to save what you need for the summary statistic.  The Start and Stop of the last summary should indicate the entire
+                    // range of that summary statistic.  If there is only a single year requested, then I only want the one entry
+                    // Fill in the metadata like above, with the total atbats and hits for reference
+                }
+            }
         }
 
         /// <summary>
@@ -126,9 +181,15 @@ namespace LahmanStats
         {
             switch (target)
             {
-                case StatsTarget.Individual: return ComputeForIndividual(identifiers, start, stop);
-                case StatsTarget.Team: return ComputeForTeam(identifiers, start, stop);
-                case StatsTarget.League: return ComputeForLeague(identifiers, start, stop);
+                case StatsTarget.Individual:
+                    return ComputeForIndividual(identifiers, start, stop);
+                    break;
+                case StatsTarget.Team:
+                    return ComputeForTeam(identifiers, start, stop);
+                    break;
+                case StatsTarget.League:
+                    return ComputeForLeague(identifiers, start, stop);
+                    break;
                 default: return null;
             }
         }

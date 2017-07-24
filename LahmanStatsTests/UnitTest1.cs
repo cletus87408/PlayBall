@@ -47,12 +47,29 @@ namespace LahmanStatsTests
             Assert.AreEqual(retVals[1].Identifier, "suzukic01");
 
             Assert.AreEqual(retVals[0].Start, new DateTime(2005, 1, 1));
-            Assert.AreEqual(retVals[0].Stop, new DateTime(2005, 1, 1));
+            Assert.AreEqual(retVals[0].Stop, new DateTime(2005, 12, 31));
             Assert.AreEqual(retVals[1].Start, new DateTime(2006, 1, 1));
-            Assert.AreEqual(retVals[1].Stop, new DateTime(2006, 1, 1));
+            Assert.AreEqual(retVals[1].Stop, new DateTime(2006, 12, 31));
 
             Assert.AreEqual(retVals[0].Target, StatsTarget.Individual);
             Assert.AreEqual(retVals[1].Target, StatsTarget.Individual);
+        }
+
+        [TestMethod]
+        public void TestSingleTeamBA()
+        {
+            BattingAverage ba = new BattingAverage(database);
+
+            var retVal = ba.Compute(new List<string> {"SEA"}, StatsTarget.Team, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+
+            var retVals = retVal.ToArray();
+
+            Assert.AreEqual(retVals.Length, 1);
+            Assert.AreEqual(retVals[0].Target, StatsTarget.Team);
+            Assert.AreEqual(retVals[0].Identifier, "SEA");
+            Assert.AreEqual(retVals[0].Start, new DateTime(2006, 1, 1));
+            Assert.AreEqual(retVals[0].Stop, new DateTime(2006, 12, 31));
+            Assert.AreEqual(retVals[0].Value, 0.271, 1E-3);
         }
     }
 }

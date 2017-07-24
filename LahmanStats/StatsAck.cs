@@ -14,11 +14,13 @@ using StatsManager;
 
 namespace LahmanStats
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// Basic StatsAck.  Implements the IStatsAck interface.  Does not do anything
     /// fancy other than provide concrete implementations of the interface members.
     /// </summary>
-    /// <seealso cref="StatsManager.IStatsAck" />
+    /// <seealso cref="IStatsAck" />
     class StatsAck : IStatsAck
     {
         /// <summary>
@@ -50,5 +52,34 @@ namespace LahmanStats
         /// </summary>
         /// <value>The value.</value>
         public double Value { get; set; }
+
+        /// <summary>
+        /// The metadata for this ack
+        /// Uses lazy initialization.  If no one ever assigns any metadata, then
+        /// no metadata is created.  
+        /// </summary>
+        private Dictionary<string, string> metadata;
+
+        /// <summary>
+        /// Adds the metadata item.  If this is the first metatada item, then the
+        /// metadata collection which did not previously exist is created.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The value.</param>
+        public void AddMetadataItem(string key, string value)
+        {
+            if (this.metadata == null)
+            {
+                this.metadata = new Dictionary<string, string>();
+            }
+
+            this.metadata[key] = value;
+        }
+
+        /// <summary>
+        /// Gets the metadata for this ack.
+        /// </summary>
+        /// <value>The metadata.</value>
+        public IReadOnlyDictionary<string, string> Metadata => this.metadata;
     }
 }
