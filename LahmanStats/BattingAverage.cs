@@ -164,10 +164,43 @@ namespace LahmanStats
         /// <returns>IEnumerable&lt;IStatsAck&gt;.</returns>
         private IEnumerable<IStatsAck> ComputeForLeague(IEnumerable<string> identifiers, DateTime start, DateTime stop)
         {
-           // TODO: Not yet implemented.  Will work on later 
-            return null;
-        }
+            foreach (string id in identifiers)
+            {
 
+                string league = id;
+
+                // One stat entry for every year requested
+                foreach (var year in Enumerable.Range(start.Year, (stop.Year - start.Year) + 1))
+                {
+                    int y = year;       
+
+                    var thisSeason = this.database.Battings     // From all batters for all time
+                        .Where(row => row.lgID == league)       // Filter by the requested league
+                        .Where(row => row.yearID == (short)y)   // Filter by the current year
+                        .Select(row => row);                    // Return the entire row
+
+                    if (thisSeason.Any())
+                    {
+                        int cumulativeAB = 0, cumulativeH = 0;
+
+                        thisSeason.ToList().ForEach(
+                            row =>
+                            {
+                                cumulativeAB += row.AB.Value;
+                                cumulativeH += row.H.Value;
+                            });
+
+
+                        StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(y, 1, 1), Stop = new DateTime(y, 12, 31), Target = StatsTarget.League };
+                        thisStat.Value = BasicStats.BattingAverage(atBats: cumulativeAB, hits: cumulativeH);
+                        thisStat.AddMetadataItem("AtBats", cumulativeAB.ToString());
+                        thisStat.AddMetadataItem("Hits", cumulativeH.ToString());
+
+                        yield return thisStat;
+                    }
+                }
+            }
+        }
         /// <summary>
         /// Computes the Batting Average stat for each identifier in the incoming list (might be more than
         /// one player/team/league per invocation).

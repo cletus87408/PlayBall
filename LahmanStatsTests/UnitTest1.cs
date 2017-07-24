@@ -127,5 +127,23 @@ namespace LahmanStatsTests
             Assert.AreEqual(retVals[0].Stop, new DateTime(2006, 12, 31));
             Assert.AreEqual(retVals[0].Value, 0.271, 1E-3);
         }
+
+        [TestMethod]
+        public void TestLeagueBA()
+        {
+            BattingAverage ba = new BattingAverage(database);
+
+            var retVal = ba.Compute(new List<string> { "AL" }, StatsTarget.League, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+
+            var retVals = retVal.ToArray();
+
+            Assert.AreEqual(retVals.Length, 1);
+            Assert.AreEqual(retVals[0].Target, StatsTarget.League);
+            Assert.AreEqual(retVals[0].Identifier, "AL");
+            Assert.AreEqual(retVals[0].Start, new DateTime(2006, 1, 1));
+            Assert.AreEqual(retVals[0].Stop, new DateTime(2006, 12, 31));
+            Assert.AreEqual(retVals[0].Value, 0.275, 1E-3);
+
+        }
     }
 }
