@@ -66,14 +66,7 @@ namespace LahmanStats
             // For every player in the list...
             foreach (string id in identifiers)
             {
-                // Find the players entries in the batting database
-                var playerRows = from row in this.database.Battings where row.playerID == id select row;
-                // Find those rows from the players entries that match the years requested 
-                // Note that for the Lahman database, time granularity is by year
-                var matchingRows = from row in playerRows 
-                    where row.yearID >= start.Year
-                    where row.yearID <= stop.Year
-                    select row;
+                var matchingRows = this.SearchForIndividual(id, start, stop);
 
                 // Did we find any matches?
                 if (matchingRows.Any())
@@ -115,12 +108,8 @@ namespace LahmanStats
                 // One stat entry for every year requested
                 foreach (var year in Enumerable.Range(start.Year, (stop.Year - start.Year) + 1))
                 {
+                    var thisSeason = this.SearchForTeam(team, year);
                     int y = year;       // Lambda capture again
-
-                    var thisSeason = this.database.Battings     // From all batters for all time
-                        .Where(row => row.teamID == team)       // Filter out our team only for the result
-                        .Where(row => row.yearID == (short)y)   // Filter by the current year
-                        .Select(row => row);                    // Return the entire row
 
                     // Did we find any batters for team "id" for year "y"?
                     if (thisSeason.Any())
