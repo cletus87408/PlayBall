@@ -28,14 +28,7 @@ namespace LahmanStats
             // For every player in the list...
             foreach (string id in identifiers)
             {
-                // Find the players entries in the batting database
-                var playerRows = from row in this.database.Battings where row.playerID == id select row;
-                // Find those rows from the players entries that match the years requested 
-                // Note that for the Lahman database, time granularity is by year
-                var matchingRows = from row in playerRows
-                                   where row.yearID >= start.Year
-                                   where row.yearID <= stop.Year
-                                   select row;
+                var matchingRows = SearchForIndividual(id, start, stop);
 
                 if (matchingRows.Any())
                 {
@@ -56,8 +49,43 @@ namespace LahmanStats
 
         private IEnumerable<IStatsAck> ComputeForTeam(IEnumerable<string> identifiers, DateTime start, DateTime stop)
         {
-            // TODO: Not yet implemented.  Will work on later
-            return null;
+            foreach(string id in identifiers)
+            {
+                string team = id;
+
+                foreach (var year in Enumerable.Range(start.Year, (stop.Year - start.Year) + 1))
+                {
+                    var thisSeason = this.SearchForTeam(team, year);
+                    int y = year;
+
+                    if(thisSeason.Any())
+                    {
+                        int cumulativeAB = 0, cumulativeBB = 0, cumulativeHBP = 0, cumulativeSH = 0, cumulativeSF = 0, cumulativeRODI = 0;
+
+                        thisSeason.ToList().ForEach(
+                            row =>
+                            {
+                                cumulativeAB += row.AB.Value;
+                                cumulativeBB += row.BB.Value;
+                                cumulativeHBP += row.HBP.Value;
+                                cumulativeSF += row.SF.Value;
+                                cumulativeSH += row.SH.Value;
+                            });
+
+                        //construct the return object, use cumulativeRODI as placeholder
+                        StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(y, 1, 1), Stop = new DateTime(y, 12, 31), Target = StatsTarget.Team };
+                        thisStat.Value = BasicStats.PlateAppearances(atBats: cumulativeAB, walks: cumulativeBB, hitByPitch: cumulativeHBP, sacHit: cumulativeSH, sacFly: cumulativeSF, reachedOnDefensiveInterference: cumulativeRODI);
+                        thisStat.AddMetadataItem("AtBats", cumulativeAB.ToString());
+                        thisStat.AddMetadataItem("Walks", cumulativeBB.ToString());
+                        thisStat.AddMetadataItem("HitByPitch", cumulativeHBP.ToString());
+                        thisStat.AddMetadataItem("SacHit", cumulativeSH.ToString());
+                        thisStat.AddMetadataItem("SacFly", cumulativeSF.ToString());
+                        thisStat.AddMetadataItem("ReachedOnDefensiveInterference", cumulativeRODI.ToString());
+
+                        yield return thisStat;
+                    }
+                }
+            }
         }
 
         private IEnumerable<IStatsAck> ComputeForLeague(IEnumerable<string> identifiers, DateTime start, DateTime stop)
