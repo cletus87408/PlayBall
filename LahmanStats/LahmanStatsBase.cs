@@ -31,49 +31,16 @@ namespace LahmanStats
     /// <seealso cref="StatsManager.IStatsPlugin" />
     public abstract class LahmanStatsBase : IStatsPlugin
     {
-
         /// <summary>
         /// The database
         /// </summary>
-        protected LahmanEntities database;
+        protected readonly LahmanEntities database;
 
         /// <summary>
         /// The metadata
         /// </summary>
         protected Dictionary<string, string> metadata = new Dictionary<string, string>();
 
-
-        //searches for a matching individual ID in the database and returns all matching rows
-        protected IQueryable<Batting> SearchForIndividual(string id, DateTime start, DateTime stop)
-        {
-            // Find the players entries in the batting database
-            var playerRows = from row in this.database.Battings where row.playerID == id select row;
-            // Find those rows from the players entries that match the years requested 
-            // Note that for the Lahman database, time granularity is by year
-            var matchingRows = from row in playerRows
-                               where row.yearID >= start.Year
-                               where row.yearID <= stop.Year
-                               select row;
-
-            return matchingRows;
-        }
-
-        //searches for a matching team in the database and returns all matching rows
-        protected IQueryable<Batting> SearchForTeam(string team, int year)
-        { 
-            var thisSeason = this.database.Battings     // From all batters for all time
-                .Where(row => row.teamID == team)       // Filter out our team only for the result
-                .Where(row => row.yearID == (short)year)   // Filter by the current year
-                .Select(row => row);                    // Return the entire row
-
-            return thisSeason;
-        }
-
-        //searches for a matching league in the database and returns all matching rows
-        protected IQueryable<Batting> SearchForLeague(string league, int year)
-        {
-            return null; //TODO
-        }
         /// <summary>
         /// Gets the name of the stat.  The name should be reasonably descriptive, full language text
         /// Something like "Wins above replacement" would do nicely.

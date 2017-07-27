@@ -28,7 +28,7 @@ namespace LahmanStats
             // For every player in the list...
             foreach (string id in identifiers)
             {
-                var matchingRows = this.SearchForIndividual(id, start, stop);
+                var matchingRows = this.database.Battings.Individual(id).DateRange((short)start.Year, (short)stop.Year);
 
                 if (matchingRows.Any())
                 {
@@ -51,7 +51,7 @@ namespace LahmanStats
 
                 foreach (var year in Enumerable.Range(start.Year, (stop.Year - start.Year) + 1))
                 {
-                    var thisSeason = this.SearchForTeam(team, year);
+                    var thisSeason = this.database.Battings.Team(team).DateRange((short)year, (short)year);
                     int y = year;
 
                     if(thisSeason.Any())

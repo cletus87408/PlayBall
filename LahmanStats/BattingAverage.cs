@@ -66,7 +66,7 @@ namespace LahmanStats
             // For every player in the list...
             foreach (string id in identifiers)
             {
-                var matchingRows = this.SearchForIndividual(id, start, stop);
+                var matchingRows = this.database.Battings.Individual(id).DateRange((short)start.Year, (short)stop.Year);
 
                 // Did we find any matches?
                 if (matchingRows.Any())
@@ -108,7 +108,7 @@ namespace LahmanStats
                 // One stat entry for every year requested
                 foreach (var year in Enumerable.Range(start.Year, (stop.Year - start.Year) + 1))
                 {
-                    var thisSeason = this.SearchForTeam(team, year);
+                    var thisSeason = this.database.Battings.Team(team).DateRange((short)year, (short)year);
                     int y = year;       // Lambda capture again
 
                     // Did we find any batters for team "id" for year "y"?

@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BattingAverage.cs" />
+    <Compile Include="BattingExtensions.cs" />
+    <Compile Include="FieldingExtensions.cs" />
     <Compile Include="PlateAppearances.cs" />
     <Compile Include="NonIntentionalBaseOnBalls.cs" />
     <Compile Include="Singles.cs" />
