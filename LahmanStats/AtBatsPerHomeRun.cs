@@ -7,17 +7,15 @@ using WpfApplication1;
 
 namespace LahmanStats
 {
-    // Singles plugin, Implements the IStatsPlugin interface for the
-    // Batting Average statistic using the Lahman database Entity Framework objects as the data source.
-    public class NonIntentionalBaseOnBalls : LahmanStatsBase
+    public class AtBatsPerHomeRun : LahmanStatsBase
     {
-        public override string Name => "Non Intentional Base On Balls";
+        public override string Name => "At Bats Per HomeRun";
 
-        public override string ShortName => "NIBB";
+        public override string ShortName => "AB/HR";
 
-        public override string Explanation => @"Total walks minus intentional walks.";
+        public override string Explanation => @"The total number of At Bats divided by total number of homeruns";
 
-        public NonIntentionalBaseOnBalls(LahmanEntities db) : base(db)
+        public AtBatsPerHomeRun(LahmanEntities db) : base(db)
         {
 
         }
@@ -35,7 +33,9 @@ namespace LahmanStats
                     foreach (var row in matchingRows)
                     {
                         StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(row.yearID, 1, 1), Stop = new DateTime(row.yearID, 1, 1), Target = StatsTarget.Individual };
-                        thisStat.Value = BasicStats.NonIntentionalBaseOnBalls(walks: row.BB.Value, intentionalWalks: row.IBB.Value);
+
+                        thisStat.Value = BasicStats.AtBatsPerHomeRun(atBats: row.AB.Value, homeRuns: row.HR.Value);
+
                         yield return thisStat;
                     }
                 }
@@ -45,7 +45,7 @@ namespace LahmanStats
 
         private IEnumerable<IStatsAck> ComputeForTeam(IEnumerable<string> identifiers, DateTime start, DateTime stop)
         {
-            foreach(string id in identifiers)
+            foreach (string id in identifiers)
             {
                 string team = id;
 
@@ -54,25 +54,24 @@ namespace LahmanStats
                     var thisSeason = this.database.Battings.Team(team).DateRange((short)year, (short)year);
                     int y = year;
 
-                    if(thisSeason.Any())
+                    if (thisSeason.Any())
                     {
-                        int cumulativeBB = 0, cumulativeIBB = 0;
+                        int cumulativeAB = 0, cumulativeHR = 0;
 
                         thisSeason.ToList().ForEach(
                             row =>
                             {
-                                cumulativeBB += row.BB.Value;
-                                cumulativeIBB += row.IBB.Value;
+                                cumulativeAB += row.AB.Value;
+                                cumulativeHR += row.HR.Value;
                             });
 
+                        //construct the return object, use cumulativeRODI as placeholder
                         StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(y, 1, 1), Stop = new DateTime(y, 12, 31), Target = StatsTarget.Team };
-                        thisStat.Value = BasicStats.NonIntentionalBaseOnBalls(walks: cumulativeBB, intentionalWalks: cumulativeIBB);
-                        thisStat.AddMetadataItem("Walks", cumulativeBB.ToString());
-                        thisStat.AddMetadataItem("Intentional Walks", cumulativeIBB.ToString());
-
+                        thisStat.Value = BasicStats.AtBatsPerHomeRun(atBats: cumulativeAB, homeRuns: cumulativeHR);
+                        thisStat.AddMetadataItem("AtBats", cumulativeAB.ToString());
+                        thisStat.AddMetadataItem("HomeRuns", cumulativeHR.ToString());
                         yield return thisStat;
                     }
-                    
                 }
             }
         }
@@ -85,28 +84,29 @@ namespace LahmanStats
 
                 foreach (var year in Enumerable.Range(start.Year, (stop.Year - start.Year) + 1))
                 {
+                    //find matching rows
                     var thisSeason = this.database.Battings.League(league).DateRange((short)year, (short)year);
                     int y = year;
 
+                    //if any found sum the target values
                     if (thisSeason.Any())
                     {
-                        int cumulativeBB = 0, cumulativeIBB = 0;
+                        int cumulativeAB = 0, cumulativeHR = 0;
 
                         thisSeason.ToList().ForEach(
                             row =>
                             {
-                                cumulativeBB += row.BB.Value;
-                                cumulativeIBB += row.IBB.Value;
+                                cumulativeAB += row.AB.Value;
+                                cumulativeHR += row.HR.Value;
                             });
 
+                        //construct the return object, use cumulativeRODI as placeholder
                         StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(y, 1, 1), Stop = new DateTime(y, 12, 31), Target = StatsTarget.League };
-                        thisStat.Value = BasicStats.NonIntentionalBaseOnBalls(walks: cumulativeBB, intentionalWalks: cumulativeIBB);
-                        thisStat.AddMetadataItem("Walks", cumulativeBB.ToString());
-                        thisStat.AddMetadataItem("Intentional Walks", cumulativeIBB.ToString());
-
+                        thisStat.Value = BasicStats.AtBatsPerHomeRun(atBats: cumulativeAB, homeRuns: cumulativeHR);
+                        thisStat.AddMetadataItem("AtBats", cumulativeAB.ToString());
+                        thisStat.AddMetadataItem("HomeRuns", cumulativeHR.ToString());
                         yield return thisStat;
                     }
-
                 }
             }
         }

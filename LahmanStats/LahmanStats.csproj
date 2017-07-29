@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="BattingAverage.cs" />
     <Compile Include="BattingExtensions.cs" />
+    <Compile Include="AtBatsPerHomeRun.cs" />
     <Compile Include="FieldingExtensions.cs" />
     <Compile Include="PlateAppearances.cs" />
     <Compile Include="NonIntentionalBaseOnBalls.cs" />
