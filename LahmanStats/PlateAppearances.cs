@@ -90,8 +90,45 @@ namespace LahmanStats
 
         private IEnumerable<IStatsAck> ComputeForLeague(IEnumerable<string> identifiers, DateTime start, DateTime stop)
         {
-            // TODO: Not yet implemented.  Will work on later 
-            return null;
+            foreach (string id in identifiers)
+            {
+                string league = id;
+
+                foreach (var year in Enumerable.Range(start.Year, (stop.Year - start.Year) + 1))
+                {
+                    //find matching rows
+                    var thisSeason = this.database.Battings.League(league).DateRange((short)year, (short)year);
+                    int y = year;
+
+                    //if any found sum the target values
+                    if (thisSeason.Any())
+                    {
+                        int cumulativeAB = 0, cumulativeBB = 0, cumulativeHBP = 0, cumulativeSH = 0, cumulativeSF = 0, cumulativeRODI = 0;
+
+                        thisSeason.ToList().ForEach(
+                            row =>
+                            {
+                                cumulativeAB += row.AB.Value;
+                                cumulativeBB += row.BB.Value;
+                                cumulativeHBP += row.HBP.Value;
+                                cumulativeSF += row.SF.Value;
+                                cumulativeSH += row.SH.Value;
+                            });
+
+                        //construct the return object, use cumulativeRODI as placeholder
+                        StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(y, 1, 1), Stop = new DateTime(y, 12, 31), Target = StatsTarget.League };
+                        thisStat.Value = BasicStats.PlateAppearances(atBats: cumulativeAB, walks: cumulativeBB, hitByPitch: cumulativeHBP, sacHit: cumulativeSH, sacFly: cumulativeSF, reachedOnDefensiveInterference: cumulativeRODI);
+                        thisStat.AddMetadataItem("AtBats", cumulativeAB.ToString());
+                        thisStat.AddMetadataItem("Walks", cumulativeBB.ToString());
+                        thisStat.AddMetadataItem("HitByPitch", cumulativeHBP.ToString());
+                        thisStat.AddMetadataItem("SacHit", cumulativeSH.ToString());
+                        thisStat.AddMetadataItem("SacFly", cumulativeSF.ToString());
+                        thisStat.AddMetadataItem("ReachedOnDefensiveInterference", cumulativeRODI.ToString());
+
+                        yield return thisStat;
+                    }
+                }
+            }
         }
 
         // Computes the Batting Average stat for each identifier in the incoming list (might be more than

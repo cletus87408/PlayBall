@@ -30,6 +30,14 @@
                 .Select(row => row); // Return the entire row
         }
 
+        //searches for a matching league id in the batting database and returns all matching rows
+        public static IQueryable<Batting> League(this IQueryable<Batting> data, string league)
+        {
+            return data // from all batters all time
+                .Where(row => row.lgID == league)
+                .Select(row => row);
+        }
+
         public static IQueryable<Batting> DateRange(this IQueryable<Batting> data, short startYear, short stopYear)
         {
             // Find those rows from the data entries that match the years requested 

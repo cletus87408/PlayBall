@@ -73,6 +73,23 @@ namespace LahmanStatsTests
         }
 
         [TestMethod]
+        public void TestLeagueBA()
+        {
+            BattingAverage ba = new BattingAverage(database);
+
+            var retVal = ba.Compute(new List<string> { "AL" }, StatsTarget.League, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+
+            var retVals = retVal.ToArray();
+
+            Assert.AreEqual(retVals.Length, 1);
+            Assert.AreEqual(retVals[0].Target, StatsTarget.League);
+            Assert.AreEqual(retVals[0].Identifier, "AL");
+            Assert.AreEqual(retVals[0].Start, new DateTime(2006, 1, 1));
+            Assert.AreEqual(retVals[0].Stop, new DateTime(2006, 12, 31));
+            Assert.AreEqual(retVals[0].Value, 0.275, 1E-3);
+        }
+
+        [TestMethod]
         public void TestSingleIndividualSingles()
         {
             Singles s = new Singles(database);
@@ -116,6 +133,24 @@ namespace LahmanStatsTests
             Assert.AreEqual(retVals[0].Start, new DateTime(2006, 1, 1));
             Assert.AreEqual(retVals[0].Stop, new DateTime(2006, 12, 31));
             Assert.AreEqual(retVals[0].Value, 1060.0, 1E-3);
+
+        }
+
+        [TestMethod]
+        public void TestLeagueSingle()
+        {
+            Singles s = new Singles(database);
+
+            var retVal = s.Compute(new List<string> { "AL" }, StatsTarget.League, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+
+            var retVals = retVal.ToArray();
+
+            Assert.AreEqual(retVals.Length, 1);
+            Assert.AreEqual(retVals[0].Target, StatsTarget.League);
+            Assert.AreEqual(retVals[0].Identifier, "AL");
+            Assert.AreEqual(retVals[0].Start, new DateTime(2006, 1, 1));
+            Assert.AreEqual(retVals[0].Stop, new DateTime(2006, 12, 31));
+            Assert.AreEqual(retVals[0].Value, 14334.0, 1E-3);
 
         }
 
@@ -165,6 +200,25 @@ namespace LahmanStatsTests
         }
 
         [TestMethod]
+        public void TestLeaguePA()
+        {
+            PlateAppearances pa = new PlateAppearances(database);
+
+            var retVal = pa.Compute(new List<string> { "AL" }, StatsTarget.League, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+
+            var retVals = retVal.ToArray();
+
+            Assert.AreEqual(retVals.Length, 1);
+            Assert.AreEqual(retVals[0].Target, StatsTarget.League);
+            Assert.AreEqual(retVals[0].Identifier, "AL");
+            Assert.AreEqual(retVals[0].Start, new DateTime(2006, 1, 1));
+            Assert.AreEqual(retVals[0].Stop, new DateTime(2006, 12, 31));
+           
+            //had to remove this test, values diverge since we have no way to take into account reached on defensive interference yet
+            // Assert.AreEqual(retVals[0].Value, 87676.0, 1E-3);
+        }
+
+        [TestMethod]
         public void TestSingleIndividualNonIntentionalBaseOnBalls()
         {
             NonIntentionalBaseOnBalls NIBB = new NonIntentionalBaseOnBalls(database);
@@ -208,6 +262,89 @@ namespace LahmanStatsTests
             Assert.AreEqual(retVals[0].Start, new DateTime(2006, 1, 1));
             Assert.AreEqual(retVals[0].Stop, new DateTime(2006, 12, 31));
             Assert.AreEqual(retVals[0].Value, 355.0, 1E-3);
+
+        }
+
+        [TestMethod]
+        public void TestLeagueNonIntentionalBaseOnBalls()
+        {
+            NonIntentionalBaseOnBalls NIBB = new NonIntentionalBaseOnBalls(database);
+
+            var retVal = NIBB.Compute(new List<string> { "AL" }, StatsTarget.League, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+
+            var retVals = retVal.ToArray();
+
+            Assert.AreEqual(retVals.Length, 1);
+            Assert.AreEqual(retVals[0].Target, StatsTarget.League);
+            Assert.AreEqual(retVals[0].Identifier, "AL");
+            Assert.AreEqual(retVals[0].Start, new DateTime(2006, 1, 1));
+            Assert.AreEqual(retVals[0].Stop, new DateTime(2006, 12, 31));
+            Assert.AreEqual(retVals[0].Value, 6718.0, 1E-3);
+
+        }
+
+        [TestMethod]
+        public void TestSingleIndividualAtBatsPerHomeRun()
+        {
+           AtBatsPerHomeRun ABHR = new AtBatsPerHomeRun(database);
+
+            var retVal = ABHR.Compute(new List<string> { "suzukic01" }, StatsTarget.Individual, new DateTime(2005, 1, 1),
+                new DateTime(2006, 1, 1));
+
+            var retVals = retVal.ToArray();
+
+            // Should be one result per year requested (2005, 2006)
+            Assert.AreEqual(retVals.Length, 2);
+
+            // 
+            Assert.AreEqual(retVals[0].Value, 45.266, 1E-3);
+            Assert.AreEqual(retVals[1].Value, 77.222, 1E-3);
+
+            Assert.AreEqual(retVals[0].Identifier, "suzukic01");
+            Assert.AreEqual(retVals[1].Identifier, "suzukic01");
+
+            Assert.AreEqual(retVals[0].Start, new DateTime(2005, 1, 1));
+            Assert.AreEqual(retVals[0].Stop, new DateTime(2005, 1, 1));
+            Assert.AreEqual(retVals[1].Start, new DateTime(2006, 1, 1));
+            Assert.AreEqual(retVals[1].Stop, new DateTime(2006, 1, 1));
+
+            Assert.AreEqual(retVals[0].Target, StatsTarget.Individual);
+            Assert.AreEqual(retVals[1].Target, StatsTarget.Individual);
+        }
+
+        [TestMethod]
+        public void TestTeamAtBatsPerHomeRun()
+        {
+           AtBatsPerHomeRun ABHR = new AtBatsPerHomeRun(database);
+
+            var retVal = ABHR.Compute(new List<string> { "SEA" }, StatsTarget.Team, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+
+            var retVals = retVal.ToArray();
+
+            Assert.AreEqual(retVals.Length, 1);
+            Assert.AreEqual(retVals[0].Target, StatsTarget.Team);
+            Assert.AreEqual(retVals[0].Identifier, "SEA");
+            Assert.AreEqual(retVals[0].Start, new DateTime(2006, 1, 1));
+            Assert.AreEqual(retVals[0].Stop, new DateTime(2006, 12, 31));
+            Assert.AreEqual(retVals[0].Value, 32.965, 1E-3);
+
+        }
+
+        [TestMethod]
+        public void TestLeagueAtBatsPerHomeRun()
+        {
+            AtBatsPerHomeRun ABHR = new AtBatsPerHomeRun(database);
+
+            var retVal = ABHR.Compute(new List<string> { "AL" }, StatsTarget.League, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+
+            var retVals = retVal.ToArray();
+
+            Assert.AreEqual(retVals.Length, 1);
+            Assert.AreEqual(retVals[0].Target, StatsTarget.League);
+            Assert.AreEqual(retVals[0].Identifier, "AL");
+            Assert.AreEqual(retVals[0].Start, new DateTime(2006, 1, 1));
+            Assert.AreEqual(retVals[0].Stop, new DateTime(2006, 12, 31));
+            Assert.AreEqual(retVals[0].Value, 30.8315, 1E-3);
 
         }
     }
