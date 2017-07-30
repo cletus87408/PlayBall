@@ -78,7 +78,7 @@ namespace StatsLibrary
         }
 
         // SLG
-        // Slugging Average = ((1B + (2B * 2) + (3B * 3) + (4B * 4))/AB)
+        // Slugging Percentage = ((1B + (2B * 2) + (3B * 3) + (4B * 4))/AB)
         public static double SluggingPercentage(int hits, int doubles, int triples, int homeRuns, int atBats) 
         {
             double totalBases = BasicStats.TotalBases(hits, doubles, triples, homeRuns);
@@ -87,13 +87,13 @@ namespace StatsLibrary
         }
 
         // TA
-        // Total Average = ((TB + BB + HBP + SB - CS) / (AB - H + CS + GIDP))
+        // Total Average = ((TB + BB + HBP + SB) / (AB - H + CS + GIDP))
         public static double TotalAverage(int doubles, int triples, int homeRuns, int hitByPitch, int walks, int stolenBases, int atBats, int hits, int caughtStealing, int groundedIntoDoublePlay) 
         {
             double totalBases = BasicStats.TotalBases(hits, doubles, triples, homeRuns);
             int denominator = (atBats - hits + caughtStealing + groundedIntoDoublePlay);
 
-            return denominator != 0 ? (totalBases + hitByPitch + walks + stolenBases - caughtStealing) / (1.0 * denominator) : 0.0;
+            return denominator != 0 ? (totalBases + hitByPitch + walks + stolenBases) / (1.0 * denominator) : 0.0;
         }
 
         // TOB
@@ -134,8 +134,9 @@ namespace StatsLibrary
 
         // SB%
         // Stolen Base Percentage = Stolen Bases/ Attempts
-        public static double StolenBasePercentage(int stolenBases, int stolenBasesAttempted) 
+        public static double StolenBasePercentage(int stolenBases, int caughtStealing) 
         {
+            int stolenBasesAttempted = (stolenBases + caughtStealing);
             return stolenBasesAttempted != 0 ? (stolenBases / (1.0 * stolenBasesAttempted)) : 0.0;
         }
 
