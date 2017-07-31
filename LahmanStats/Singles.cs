@@ -28,14 +28,7 @@ namespace LahmanStats
             // For every player in the list...
             foreach (string id in identifiers)
             {
-                // Find the players entries in the batting database
-                var playerRows = from row in this.database.Battings where row.playerID == id select row;
-                // Find those rows from the players entries that match the years requested 
-                // Note that for the Lahman database, time granularity is by year
-                var matchingRows = from row in playerRows
-                                   where row.yearID >= start.Year
-                                   where row.yearID <= stop.Year
-                                   select row;
+                var matchingRows = this.database.Battings.Individual(id).DateRange((short)start.Year, (short)stop.Year);
 
                 if (matchingRows.Any())
                 {
@@ -52,14 +45,78 @@ namespace LahmanStats
 
         private IEnumerable<IStatsAck> ComputeForTeam(IEnumerable<string> identifiers, DateTime start, DateTime stop)
         {
-            // TODO: Not yet implemented.  Will work on later
-            return null;
+            foreach(string id in identifiers)
+            {
+                string team = id;
+
+                foreach (var year in Enumerable.Range(start.Year, (stop.Year - start.Year) + 1))
+                {
+                    var thisSeason = this.database.Battings.Team(team).DateRange((short)year, (short)year);
+                    int y = year;
+
+                    if(thisSeason.Any())
+                    {
+                        int cumulativeH = 0, cumulative2B = 0, cumulative3B = 0, cumulativeHR = 0;
+
+                        thisSeason.ToList().ForEach(
+                            row =>
+                            {
+                                cumulativeH += row.H.Value;
+                                cumulative2B += row.C2B.Value;
+                                cumulative3B += row.C3B.Value;
+                                cumulativeHR += row.HR.Value;
+                            });
+
+                        StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(y, 1, 1), Stop = new DateTime(y, 12, 31), Target = StatsTarget.Team };
+                        thisStat.Value = BasicStats.Singles(hits: cumulativeH, doubles: cumulative2B, triples: cumulative3B, homeRuns: cumulativeHR);
+                        thisStat.AddMetadataItem("Hits", cumulativeH.ToString());
+                        thisStat.AddMetadataItem("Doubles", cumulative2B.ToString());
+                        thisStat.AddMetadataItem("Triples", cumulative3B.ToString());
+                        thisStat.AddMetadataItem("HomeRuns", cumulativeHR.ToString());
+
+                        yield return thisStat;
+                    }
+                    
+                }
+            }
         }
 
         private IEnumerable<IStatsAck> ComputeForLeague(IEnumerable<string> identifiers, DateTime start, DateTime stop)
         {
-            // TODO: Not yet implemented.  Will work on later 
-            return null;
+            foreach (string id in identifiers)
+            {
+                string league = id;
+
+                foreach (var year in Enumerable.Range(start.Year, (stop.Year - start.Year) + 1))
+                {
+                    var thisSeason = this.database.Battings.League(league).DateRange((short)year, (short)year);
+                    int y = year;
+
+                    if (thisSeason.Any())
+                    {
+                        int cumulativeH = 0, cumulative2B = 0, cumulative3B = 0, cumulativeHR = 0;
+
+                        thisSeason.ToList().ForEach(
+                            row =>
+                            {
+                                cumulativeH += row.H.Value;
+                                cumulative2B += row.C2B.Value;
+                                cumulative3B += row.C3B.Value;
+                                cumulativeHR += row.HR.Value;
+                            });
+
+                        StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(y, 1, 1), Stop = new DateTime(y, 12, 31), Target = StatsTarget.League };
+                        thisStat.Value = BasicStats.Singles(hits: cumulativeH, doubles: cumulative2B, triples: cumulative3B, homeRuns: cumulativeHR);
+                        thisStat.AddMetadataItem("Hits", cumulativeH.ToString());
+                        thisStat.AddMetadataItem("Doubles", cumulative2B.ToString());
+                        thisStat.AddMetadataItem("Triples", cumulative3B.ToString());
+                        thisStat.AddMetadataItem("HomeRuns", cumulativeHR.ToString());
+
+                        yield return thisStat;
+                    }
+
+                }
+            }
         }
 
         // Computes the Batting Average stat for each identifier in the incoming list (might be more than

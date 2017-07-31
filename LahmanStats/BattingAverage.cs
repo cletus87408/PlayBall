@@ -66,14 +66,7 @@ namespace LahmanStats
             // For every player in the list...
             foreach (string id in identifiers)
             {
-                // Find the players entries in the batting database
-                var playerRows = from row in this.database.Battings where row.playerID == id select row;
-                // Find those rows from the players entries that match the years requested 
-                // Note that for the Lahman database, time granularity is by year
-                var matchingRows = from row in playerRows 
-                    where row.yearID >= start.Year
-                    where row.yearID <= stop.Year
-                    select row;
+                var matchingRows = this.database.Battings.Individual(id).DateRange((short)start.Year, (short)stop.Year);
 
                 // Did we find any matches?
                 if (matchingRows.Any())
@@ -115,12 +108,8 @@ namespace LahmanStats
                 // One stat entry for every year requested
                 foreach (var year in Enumerable.Range(start.Year, (stop.Year - start.Year) + 1))
                 {
+                    var thisSeason = this.database.Battings.Team(team).DateRange((short)year, (short)year);
                     int y = year;       // Lambda capture again
-
-                    var thisSeason = this.database.Battings     // From all batters for all time
-                        .Where(row => row.teamID == team)       // Filter out our team only for the result
-                        .Where(row => row.yearID == (short)y)   // Filter by the current year
-                        .Select(row => row);                    // Return the entire row
 
                     // Did we find any batters for team "id" for year "y"?
                     if (thisSeason.Any())
@@ -166,23 +155,21 @@ namespace LahmanStats
         {
             foreach (string id in identifiers)
             {
-
+                // Copy for-loop iteration variable to local variable (C# lambda best-practice for loop captures)
                 string league = id;
 
                 // One stat entry for every year requested
                 foreach (var year in Enumerable.Range(start.Year, (stop.Year - start.Year) + 1))
                 {
-                    int y = year;       
+                    var thisSeason = this.database.Battings.League(league).DateRange((short)year, (short)year);
+                    int y = year;
 
-                    var thisSeason = this.database.Battings     // From all batters for all time
-                        .Where(row => row.lgID == league)       // Filter by the requested league
-                        .Where(row => row.yearID == (short)y)   // Filter by the current year
-                        .Select(row => row);                    // Return the entire row
-
+                    //if matching data found
                     if (thisSeason.Any())
                     {
                         int cumulativeAB = 0, cumulativeH = 0;
 
+                        //calculate sum for all matches
                         thisSeason.ToList().ForEach(
                             row =>
                             {
@@ -190,7 +177,7 @@ namespace LahmanStats
                                 cumulativeH += row.H.Value;
                             });
 
-
+                        // Construct the return object
                         StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(y, 1, 1), Stop = new DateTime(y, 12, 31), Target = StatsTarget.League };
                         thisStat.Value = BasicStats.BattingAverage(atBats: cumulativeAB, hits: cumulativeH);
                         thisStat.AddMetadataItem("AtBats", cumulativeAB.ToString());
@@ -201,6 +188,7 @@ namespace LahmanStats
                 }
             }
         }
+
         /// <summary>
         /// Computes the Batting Average stat for each identifier in the incoming list (might be more than
         /// one player/team/league per invocation).
