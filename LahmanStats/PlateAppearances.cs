@@ -7,8 +7,7 @@ using WpfApplication1;
 
 namespace LahmanStats
 {
-    // Singles plugin, Implements the IStatsPlugin interface for the
-    // Batting Average statistic using the Lahman database Entity Framework objects as the data source.
+  
     public class PlateAppearances : LahmanStatsBase
     {
         public override string Name => "Plate Appearances";
@@ -131,8 +130,7 @@ namespace LahmanStats
             }
         }
 
-        // Computes the Batting Average stat for each identifier in the incoming list (might be more than
-        // one player/team/league per invocation).
+     
         public override IEnumerable<IStatsAck> Compute(IEnumerable<string> identifiers, StatsTarget target, DateTime start, DateTime stop)
         {
             switch (target)

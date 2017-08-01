@@ -111,8 +111,7 @@ namespace LahmanStats
             }
         }
 
-        // Computes the Batting Average stat for each identifier in the incoming list (might be more than
-        // one player/team/league per invocation).
+       
         public override IEnumerable<IStatsAck> Compute(IEnumerable<string> identifiers, StatsTarget target, DateTime start, DateTime stop)
         {
             switch (target)

@@ -47,6 +47,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OnBasePercentage.cs" />
+    <Compile Include="ExtraBaseHits.cs" />
+    <Compile Include="OnBasePlusSlugging.cs" />
+    <Compile Include="TotalChances.cs" />
+    <Compile Include="TotalAverage.cs" />
+    <Compile Include="SluggingPercentage.cs" />
+    <Compile Include="TotalBases.cs" />
+    <Compile Include="PlateAppearancesPerStrikeout.cs" />
+    <Compile Include="RunsProduced.cs" />
+    <Compile Include="TimesOnBase.cs" />
+    <Compile Include="StolenBasePercentage.cs" />
+    <Compile Include="WalkToStrikeoutRatio.cs" />
     <Compile Include="BattingAverage.cs" />
     <Compile Include="BattingExtensions.cs" />
     <Compile Include="AtBatsPerHomeRun.cs" />
