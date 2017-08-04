@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using StatsManager;
 using WpfApplication1;
+using System.Linq;
 
 namespace LahmanStats
 {
@@ -30,11 +31,10 @@ namespace LahmanStats
     /// <seealso cref="StatsManager.IStatsPlugin" />
     public abstract class LahmanStatsBase : IStatsPlugin
     {
-
         /// <summary>
         /// The database
         /// </summary>
-        protected LahmanEntities database;
+        protected readonly LahmanEntities database;
 
         /// <summary>
         /// The metadata

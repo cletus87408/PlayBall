@@ -8,15 +8,15 @@ using WpfApplication1;
 namespace LahmanStats
 {
 
-    public class Singles : LahmanStatsBase
+    public class TotalBases : LahmanStatsBase
     {
-        public override string Name => "Singles";
+        public override string Name => "Total Bases";
 
-        public override string ShortName => "1B";
+        public override string ShortName => "TB";
 
-        public override string Explanation => @"Hits that advanced the batter only to first base";
+        public override string Explanation => @"Hits Weighted by number of bases reached. Ex. single = 1, triple = 3.";
 
-        public Singles(LahmanEntities db) : base(db)
+        public TotalBases(LahmanEntities db) : base(db)
         {
 
         }
@@ -34,7 +34,7 @@ namespace LahmanStats
                     foreach (var row in matchingRows)
                     {
                         StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(row.yearID, 1, 1), Stop = new DateTime(row.yearID, 1, 1), Target = StatsTarget.Individual };
-                        thisStat.Value = BasicStats.Singles(hits: row.H.Value, doubles: row.C2B.Value, triples: row.C3B.Value, homeRuns: row.HR.Value);
+                        thisStat.Value = BasicStats.TotalBases(hits: row.H.Value, doubles: row.C2B.Value, triples: row.C3B.Value, homeRuns: row.HR.Value);
                         yield return thisStat;
                     }
                 }
@@ -67,11 +67,12 @@ namespace LahmanStats
                             });
 
                         StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(y, 1, 1), Stop = new DateTime(y, 12, 31), Target = StatsTarget.Team };
-                        thisStat.Value = BasicStats.Singles(hits: cumulativeH, doubles: cumulative2B, triples: cumulative3B, homeRuns: cumulativeHR);
+                        thisStat.Value = BasicStats.TotalBases(hits: cumulativeH, doubles: cumulative2B, triples: cumulative3B, homeRuns: cumulativeHR);
                         thisStat.AddMetadataItem("Hits", cumulativeH.ToString());
                         thisStat.AddMetadataItem("Doubles", cumulative2B.ToString());
                         thisStat.AddMetadataItem("Triples", cumulative3B.ToString());
                         thisStat.AddMetadataItem("HomeRuns", cumulativeHR.ToString());
+
 
                         yield return thisStat;
                     }
@@ -105,7 +106,7 @@ namespace LahmanStats
                             });
 
                         StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(y, 1, 1), Stop = new DateTime(y, 12, 31), Target = StatsTarget.League };
-                        thisStat.Value = BasicStats.Singles(hits: cumulativeH, doubles: cumulative2B, triples: cumulative3B, homeRuns: cumulativeHR);
+                        thisStat.Value = BasicStats.TotalBases(hits: cumulativeH, doubles: cumulative2B, triples: cumulative3B, homeRuns: cumulativeHR);
                         thisStat.AddMetadataItem("Hits", cumulativeH.ToString());
                         thisStat.AddMetadataItem("Doubles", cumulative2B.ToString());
                         thisStat.AddMetadataItem("Triples", cumulative3B.ToString());
@@ -118,7 +119,6 @@ namespace LahmanStats
             }
         }
 
-   
         public override IEnumerable<IStatsAck> Compute(IEnumerable<string> identifiers, StatsTarget target, DateTime start, DateTime stop)
         {
             switch (target)

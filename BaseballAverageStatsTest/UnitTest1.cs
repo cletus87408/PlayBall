@@ -181,8 +181,8 @@ namespace BaseballAverageStatsTest
         [TestMethod]
         public void TBValidLarge()
         {
-            double RetVal = BasicStats.TotalBases(40, 10, 10, 10);
-            Assert.AreEqual(RetVal, (10.0 + (10 * 2) + (10 * 3) + (10 * 4)), 1E-10);
+            double RetVal = BasicStats.TotalBases(224, 20, 9, 9);
+            Assert.AreEqual(RetVal, (186.0 + (20 * 2) + (9 * 3) + (9 * 4)), 1E-10);
         }
     }
 
@@ -236,7 +236,7 @@ namespace BaseballAverageStatsTest
     [TestClass]
     public class TAStatsTest
     {
-        //Total Average = ((TB + BB + HBP + SB - CS) / (AB - H + CS + GIDP))
+        //Total Average = ((TB + BB + HBP + SB) / (AB - H + CS + GIDP))
 
         [TestMethod]
         public void TADivideByZero()
@@ -249,14 +249,15 @@ namespace BaseballAverageStatsTest
         public void TAValid()
         {
             double RetVal = BasicStats.TotalAverage(1, 1, 1, 1, 1, 1, 8, 4, 1, 1);
-            Assert.AreEqual(RetVal, ((10 + 1 + 1 + 1 - 1) / (8 - 4 + 1 + 1.0)), 1E-10);
+            Assert.AreEqual(RetVal, ((10 + 1 + 1 + 1) / (8 - 4 + 1 + 1.0)), 1E-10);
         }
 
+        //test with ichiro 2006
         [TestMethod]
         public void TAValid_Large()
         {
-            double RetVal = BasicStats.TotalAverage(10, 10, 10, 10, 10, 10, 400, 40, 10, 5);
-            Assert.AreEqual(RetVal, ((100 + 10 + 10 + 10 - 10) / (400 - 40 + 10 + 5.0)), 1E-10);
+            double RetVal = BasicStats.TotalAverage(20, 9, 9, 5, 49, 45, 695, 224, 2, 2);
+            Assert.AreEqual(RetVal, ((289 + 5 + 49 + 45) / (695 - 224 + 2 + 2.0)), 1E-10);
         }
 
     }
@@ -356,7 +357,7 @@ namespace BaseballAverageStatsTest
         [TestMethod]
         public void StolenBasePercentageDivideByZero()
         {
-            double RetVal = BasicStats.StolenBasePercentage(1, 0);
+            double RetVal = BasicStats.StolenBasePercentage(0, 0);
             Assert.AreEqual(RetVal, 0); //Function Returns 0.0 for Divide by Zero
         }
 
@@ -364,14 +365,14 @@ namespace BaseballAverageStatsTest
         public void StolenBasePercentageValid()
         {
             double RetVal = BasicStats.StolenBasePercentage(2, 4);
-            Assert.AreEqual(RetVal, (2 / 4.0), 1E-10);
+            Assert.AreEqual(RetVal, (2 / 6.0), 1E-10);
         }
 
         [TestMethod]
         public void StolenBasePercentageValidLarge()
         {
             double RetVal = BasicStats.StolenBasePercentage(70, 300);
-            Assert.AreEqual(RetVal, (70 / 300.0), 1E-10);
+            Assert.AreEqual(RetVal, (70 / 370.0), 1E-10);
         }
     }
 

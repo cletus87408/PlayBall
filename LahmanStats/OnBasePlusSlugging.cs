@@ -7,16 +7,15 @@ using WpfApplication1;
 
 namespace LahmanStats
 {
-  
-    public class PlateAppearances : LahmanStatsBase
+    public class OnBasePlusSlugging : LahmanStatsBase
     {
-        public override string Name => "Plate Appearances";
+        public override string Name => "On Base Plus Slugging Percentage";
 
-        public override string ShortName => "PA";
+        public override string ShortName => "OPS";
 
-        public override string Explanation => @"Total times a batter stepped up to the plate. Includes At Bats and any other form of reaching base.";
+        public override string Explanation => @"On Base Percentage + Slugging Percentage. ";
 
-        public PlateAppearances(LahmanEntities db) : base(db)
+        public OnBasePlusSlugging(LahmanEntities db) : base(db)
         {
 
         }
@@ -24,7 +23,7 @@ namespace LahmanStats
 
         private IEnumerable<IStatsAck> ComputeForIndividual(IEnumerable<string> identifiers, DateTime start, DateTime stop)
         {
-            // For every player in the list...
+     
             foreach (string id in identifiers)
             {
                 var matchingRows = this.database.Battings.Individual(id).DateRange((short)start.Year, (short)stop.Year);
@@ -35,9 +34,7 @@ namespace LahmanStats
                     {
                         StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(row.yearID, 1, 1), Stop = new DateTime(row.yearID, 1, 1), Target = StatsTarget.Individual };
 
-                        // I had to create a placeholder variable since reached on defensive interference is not a value in our database (nor can it be calculated from available data)
-                        int reachedOnDefensiveInterference = 0; // placeholder
-                        thisStat.Value = BasicStats.PlateAppearances(atBats: row.AB.Value, walks: row.BB.Value, hitByPitch: row.HBP.Value, sacHit: row.SH.Value, sacFly: row.SF.Value, reachedOnDefensiveInterference: reachedOnDefensiveInterference); 
+                        thisStat.Value = BasicStats.OnBasePlusSlugging(hits: row.H.Value, walks: row.BB.Value, hitByPitch: row.HBP.Value, atBats: row.AB.Value, sacFly: row.SF.Value, doubles: row.C2B.Value, triples: row.C3B.Value, homeRuns: row.HR.Value);
 
                         yield return thisStat;
                     }
@@ -48,7 +45,7 @@ namespace LahmanStats
 
         private IEnumerable<IStatsAck> ComputeForTeam(IEnumerable<string> identifiers, DateTime start, DateTime stop)
         {
-            foreach(string id in identifiers)
+            foreach (string id in identifiers)
             {
                 string team = id;
 
@@ -57,29 +54,34 @@ namespace LahmanStats
                     var thisSeason = this.database.Battings.Team(team).DateRange((short)year, (short)year);
                     int y = year;
 
-                    if(thisSeason.Any())
+                    if (thisSeason.Any())
                     {
-                        int cumulativeAB = 0, cumulativeBB = 0, cumulativeHBP = 0, cumulativeSH = 0, cumulativeSF = 0, cumulativeRODI = 0;
+                        int cumulativeH = 0, cumulative2B = 0, cumulative3B = 0, cumulativeHR = 0, cumulativeAB = 0, cumulativeBB = 0, cumulativeHBP = 0, cumulativeSF = 0;
 
                         thisSeason.ToList().ForEach(
                             row =>
                             {
+                                cumulativeH += row.H.Value;
+                                cumulative2B += row.C2B.Value;
+                                cumulative3B += row.C3B.Value;
+                                cumulativeHR += row.HR.Value;
                                 cumulativeAB += row.AB.Value;
                                 cumulativeBB += row.BB.Value;
                                 cumulativeHBP += row.HBP.Value;
                                 cumulativeSF += row.SF.Value;
-                                cumulativeSH += row.SH.Value;
                             });
 
-                        //construct the return object, use cumulativeRODI as placeholder
+                  
                         StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(y, 1, 1), Stop = new DateTime(y, 12, 31), Target = StatsTarget.Team };
-                        thisStat.Value = BasicStats.PlateAppearances(atBats: cumulativeAB, walks: cumulativeBB, hitByPitch: cumulativeHBP, sacHit: cumulativeSH, sacFly: cumulativeSF, reachedOnDefensiveInterference: cumulativeRODI);
+                        thisStat.Value = BasicStats.OnBasePlusSlugging(hits: cumulativeH, walks: cumulativeBB, hitByPitch: cumulativeHBP, atBats: cumulativeAB, sacFly: cumulativeSF, doubles: cumulative2B, triples: cumulative3B, homeRuns: cumulativeHR);
+                        thisStat.AddMetadataItem("Hits", cumulativeH.ToString());
+                        thisStat.AddMetadataItem("Doubles", cumulative2B.ToString());
+                        thisStat.AddMetadataItem("Triples", cumulative3B.ToString());
+                        thisStat.AddMetadataItem("HomeRuns", cumulativeHR.ToString());
                         thisStat.AddMetadataItem("AtBats", cumulativeAB.ToString());
                         thisStat.AddMetadataItem("Walks", cumulativeBB.ToString());
                         thisStat.AddMetadataItem("HitByPitch", cumulativeHBP.ToString());
-                        thisStat.AddMetadataItem("SacHit", cumulativeSH.ToString());
                         thisStat.AddMetadataItem("SacFly", cumulativeSF.ToString());
-                        thisStat.AddMetadataItem("ReachedOnDefensiveInterference", cumulativeRODI.ToString());
 
                         yield return thisStat;
                     }
@@ -102,27 +104,32 @@ namespace LahmanStats
                     //if any found sum the target values
                     if (thisSeason.Any())
                     {
-                        int cumulativeAB = 0, cumulativeBB = 0, cumulativeHBP = 0, cumulativeSH = 0, cumulativeSF = 0, cumulativeRODI = 0;
+                        int cumulativeH = 0, cumulative2B = 0, cumulative3B = 0, cumulativeHR = 0, cumulativeAB = 0, cumulativeBB = 0, cumulativeHBP = 0, cumulativeSF = 0;
 
                         thisSeason.ToList().ForEach(
                             row =>
                             {
+                                cumulativeH += row.H.Value;
+                                cumulative2B += row.C2B.Value;
+                                cumulative3B += row.C3B.Value;
+                                cumulativeHR += row.HR.Value;
                                 cumulativeAB += row.AB.Value;
                                 cumulativeBB += row.BB.Value;
                                 cumulativeHBP += row.HBP.Value;
                                 cumulativeSF += row.SF.Value;
-                                cumulativeSH += row.SH.Value;
                             });
 
-                        //construct the return object, use cumulativeRODI as placeholder
+
                         StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(y, 1, 1), Stop = new DateTime(y, 12, 31), Target = StatsTarget.League };
-                        thisStat.Value = BasicStats.PlateAppearances(atBats: cumulativeAB, walks: cumulativeBB, hitByPitch: cumulativeHBP, sacHit: cumulativeSH, sacFly: cumulativeSF, reachedOnDefensiveInterference: cumulativeRODI);
+                        thisStat.Value = BasicStats.OnBasePlusSlugging(hits: cumulativeH, walks: cumulativeBB, hitByPitch: cumulativeHBP, atBats: cumulativeAB, sacFly: cumulativeSF, doubles: cumulative2B, triples: cumulative3B, homeRuns: cumulativeHR);
+                        thisStat.AddMetadataItem("Hits", cumulativeH.ToString());
+                        thisStat.AddMetadataItem("Doubles", cumulative2B.ToString());
+                        thisStat.AddMetadataItem("Triples", cumulative3B.ToString());
+                        thisStat.AddMetadataItem("HomeRuns", cumulativeHR.ToString());
                         thisStat.AddMetadataItem("AtBats", cumulativeAB.ToString());
                         thisStat.AddMetadataItem("Walks", cumulativeBB.ToString());
                         thisStat.AddMetadataItem("HitByPitch", cumulativeHBP.ToString());
-                        thisStat.AddMetadataItem("SacHit", cumulativeSH.ToString());
                         thisStat.AddMetadataItem("SacFly", cumulativeSF.ToString());
-                        thisStat.AddMetadataItem("ReachedOnDefensiveInterference", cumulativeRODI.ToString());
 
                         yield return thisStat;
                     }

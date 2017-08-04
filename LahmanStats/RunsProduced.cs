@@ -7,16 +7,15 @@ using WpfApplication1;
 
 namespace LahmanStats
 {
-
-    public class Singles : LahmanStatsBase
+    public class RunsProduced : LahmanStatsBase
     {
-        public override string Name => "Singles";
+        public override string Name => "Runs Produced";
 
-        public override string ShortName => "1B";
+        public override string ShortName => "RP";
 
-        public override string Explanation => @"Hits that advanced the batter only to first base";
+        public override string Explanation => @"Runs plus runs batted in minus homeruns.";
 
-        public Singles(LahmanEntities db) : base(db)
+        public RunsProduced(LahmanEntities db) : base(db)
         {
 
         }
@@ -24,7 +23,7 @@ namespace LahmanStats
 
         private IEnumerable<IStatsAck> ComputeForIndividual(IEnumerable<string> identifiers, DateTime start, DateTime stop)
         {
-            // For every player in the list...
+     
             foreach (string id in identifiers)
             {
                 var matchingRows = this.database.Battings.Individual(id).DateRange((short)start.Year, (short)stop.Year);
@@ -34,7 +33,9 @@ namespace LahmanStats
                     foreach (var row in matchingRows)
                     {
                         StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(row.yearID, 1, 1), Stop = new DateTime(row.yearID, 1, 1), Target = StatsTarget.Individual };
-                        thisStat.Value = BasicStats.Singles(hits: row.H.Value, doubles: row.C2B.Value, triples: row.C3B.Value, homeRuns: row.HR.Value);
+
+                        thisStat.Value = BasicStats.RunsProduced(runs: row.R.Value, runsBattedIn: row.RBI.Value, homeRuns: row.HR.Value);
+
                         yield return thisStat;
                     }
                 }
@@ -44,7 +45,7 @@ namespace LahmanStats
 
         private IEnumerable<IStatsAck> ComputeForTeam(IEnumerable<string> identifiers, DateTime start, DateTime stop)
         {
-            foreach(string id in identifiers)
+            foreach (string id in identifiers)
             {
                 string team = id;
 
@@ -53,29 +54,26 @@ namespace LahmanStats
                     var thisSeason = this.database.Battings.Team(team).DateRange((short)year, (short)year);
                     int y = year;
 
-                    if(thisSeason.Any())
+                    if (thisSeason.Any())
                     {
-                        int cumulativeH = 0, cumulative2B = 0, cumulative3B = 0, cumulativeHR = 0;
+                        int cumulativeR = 0, cumulativeRBI = 0, cumulativeHR = 0;
 
                         thisSeason.ToList().ForEach(
                             row =>
                             {
-                                cumulativeH += row.H.Value;
-                                cumulative2B += row.C2B.Value;
-                                cumulative3B += row.C3B.Value;
+                                cumulativeR += row.R.Value;
+                                cumulativeRBI += row.RBI.Value;
                                 cumulativeHR += row.HR.Value;
                             });
 
+                  
                         StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(y, 1, 1), Stop = new DateTime(y, 12, 31), Target = StatsTarget.Team };
-                        thisStat.Value = BasicStats.Singles(hits: cumulativeH, doubles: cumulative2B, triples: cumulative3B, homeRuns: cumulativeHR);
-                        thisStat.AddMetadataItem("Hits", cumulativeH.ToString());
-                        thisStat.AddMetadataItem("Doubles", cumulative2B.ToString());
-                        thisStat.AddMetadataItem("Triples", cumulative3B.ToString());
-                        thisStat.AddMetadataItem("HomeRuns", cumulativeHR.ToString());
-
+                        thisStat.Value = BasicStats.RunsProduced(runs: cumulativeR, runsBattedIn: cumulativeRBI, homeRuns: cumulativeHR);
+                        thisStat.AddMetadataItem("Runs", cumulativeR.ToString());
+                        thisStat.AddMetadataItem("RunsBattedIn", cumulativeRBI.ToString());
+                        thisStat.AddMetadataItem("Homeruns", cumulativeHR.ToString());
                         yield return thisStat;
                     }
-                    
                 }
             }
         }
@@ -88,37 +86,36 @@ namespace LahmanStats
 
                 foreach (var year in Enumerable.Range(start.Year, (stop.Year - start.Year) + 1))
                 {
+                    //find matching rows
                     var thisSeason = this.database.Battings.League(league).DateRange((short)year, (short)year);
                     int y = year;
 
+                    //if any found sum the target values
                     if (thisSeason.Any())
                     {
-                        int cumulativeH = 0, cumulative2B = 0, cumulative3B = 0, cumulativeHR = 0;
+                        int cumulativeR = 0, cumulativeRBI = 0, cumulativeHR = 0;
 
                         thisSeason.ToList().ForEach(
                             row =>
                             {
-                                cumulativeH += row.H.Value;
-                                cumulative2B += row.C2B.Value;
-                                cumulative3B += row.C3B.Value;
+                                cumulativeR += row.R.Value;
+                                cumulativeRBI += row.RBI.Value;
                                 cumulativeHR += row.HR.Value;
                             });
 
+   
                         StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(y, 1, 1), Stop = new DateTime(y, 12, 31), Target = StatsTarget.League };
-                        thisStat.Value = BasicStats.Singles(hits: cumulativeH, doubles: cumulative2B, triples: cumulative3B, homeRuns: cumulativeHR);
-                        thisStat.AddMetadataItem("Hits", cumulativeH.ToString());
-                        thisStat.AddMetadataItem("Doubles", cumulative2B.ToString());
-                        thisStat.AddMetadataItem("Triples", cumulative3B.ToString());
-                        thisStat.AddMetadataItem("HomeRuns", cumulativeHR.ToString());
-
+                        thisStat.Value = BasicStats.RunsProduced(runs: cumulativeR, runsBattedIn: cumulativeRBI, homeRuns: cumulativeHR);
+                        thisStat.AddMetadataItem("Runs", cumulativeR.ToString());
+                        thisStat.AddMetadataItem("RunsBattedIn", cumulativeRBI.ToString());
+                        thisStat.AddMetadataItem("Homeruns", cumulativeHR.ToString());
                         yield return thisStat;
                     }
-
                 }
             }
         }
 
-   
+     
         public override IEnumerable<IStatsAck> Compute(IEnumerable<string> identifiers, StatsTarget target, DateTime start, DateTime stop)
         {
             switch (target)
