@@ -7,15 +7,15 @@ using WpfApplication1;
 
 namespace LahmanStats
 {
-    public class AtBatsPerHomeRun : LahmanStatsBase
+    public class StolenBasePercentage : LahmanStatsBase
     {
-        public override string Name => "At Bats Per HomeRun";
+        public override string Name => "Stolen Base Percentage";
 
-        public override string ShortName => "AB/HR";
+        public override string ShortName => "SB%";
 
-        public override string Explanation => @"The total number of At Bats divided by total number of homeruns";
+        public override string Explanation => @"Stolen Bases divided by Attempts.";
 
-        public AtBatsPerHomeRun(LahmanEntities db) : base(db)
+        public StolenBasePercentage(LahmanEntities db) : base(db)
         {
 
         }
@@ -23,7 +23,7 @@ namespace LahmanStats
 
         private IEnumerable<IStatsAck> ComputeForIndividual(IEnumerable<string> identifiers, DateTime start, DateTime stop)
         {
-            // For every player in the list...
+     
             foreach (string id in identifiers)
             {
                 var matchingRows = this.database.Battings.Individual(id).DateRange((short)start.Year, (short)stop.Year);
@@ -34,7 +34,7 @@ namespace LahmanStats
                     {
                         StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(row.yearID, 1, 1), Stop = new DateTime(row.yearID, 1, 1), Target = StatsTarget.Individual };
 
-                        thisStat.Value = BasicStats.AtBatsPerHomeRun(atBats: row.AB.Value, homeRuns: row.HR.Value);
+                        thisStat.Value = BasicStats.StolenBasePercentage(stolenBases: row.SB.Value, caughtStealing: row.CS.Value);
 
                         yield return thisStat;
                     }
@@ -56,20 +56,20 @@ namespace LahmanStats
 
                     if (thisSeason.Any())
                     {
-                        int cumulativeAB = 0, cumulativeHR = 0;
+                        int cumulativeSB = 0, cumulativeCS = 0;
 
                         thisSeason.ToList().ForEach(
                             row =>
                             {
-                                cumulativeAB += row.AB.Value;
-                                cumulativeHR += row.HR.Value;
+                                cumulativeSB += row.SB.Value;
+                                cumulativeCS += row.CS.Value;
                             });
 
-                        //construct the return object, use cumulativeRODI as placeholder
+                  
                         StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(y, 1, 1), Stop = new DateTime(y, 12, 31), Target = StatsTarget.Team };
-                        thisStat.Value = BasicStats.AtBatsPerHomeRun(atBats: cumulativeAB, homeRuns: cumulativeHR);
-                        thisStat.AddMetadataItem("AtBats", cumulativeAB.ToString());
-                        thisStat.AddMetadataItem("HomeRuns", cumulativeHR.ToString());
+                        thisStat.Value = BasicStats.StolenBasePercentage(stolenBases: cumulativeSB, caughtStealing: cumulativeCS);
+                        thisStat.AddMetadataItem("StolenBases", cumulativeSB.ToString());
+                        thisStat.AddMetadataItem("CaughtStealing", cumulativeCS.ToString());
                         yield return thisStat;
                     }
                 }
@@ -91,27 +91,26 @@ namespace LahmanStats
                     //if any found sum the target values
                     if (thisSeason.Any())
                     {
-                        int cumulativeAB = 0, cumulativeHR = 0;
+                        int cumulativeSB = 0, cumulativeCS = 0;
 
                         thisSeason.ToList().ForEach(
                             row =>
                             {
-                                cumulativeAB += row.AB.Value;
-                                cumulativeHR += row.HR.Value;
+                                cumulativeSB += row.SB.Value;
+                                cumulativeCS += row.CS.Value;
                             });
 
-                        //construct the return object, use cumulativeRODI as placeholder
                         StatsAck thisStat = new StatsAck { Identifier = id, Start = new DateTime(y, 1, 1), Stop = new DateTime(y, 12, 31), Target = StatsTarget.League };
-                        thisStat.Value = BasicStats.AtBatsPerHomeRun(atBats: cumulativeAB, homeRuns: cumulativeHR);
-                        thisStat.AddMetadataItem("AtBats", cumulativeAB.ToString());
-                        thisStat.AddMetadataItem("HomeRuns", cumulativeHR.ToString());
+                        thisStat.Value = BasicStats.StolenBasePercentage(stolenBases: cumulativeSB, caughtStealing: cumulativeCS);
+                        thisStat.AddMetadataItem("StolenBases", cumulativeSB.ToString());
+                        thisStat.AddMetadataItem("CaughtStealing", cumulativeCS.ToString());
                         yield return thisStat;
                     }
                 }
             }
         }
 
-
+     
         public override IEnumerable<IStatsAck> Compute(IEnumerable<string> identifiers, StatsTarget target, DateTime start, DateTime stop)
         {
             switch (target)
