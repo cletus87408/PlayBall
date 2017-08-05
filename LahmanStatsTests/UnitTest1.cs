@@ -364,6 +364,13 @@ namespace LahmanStatsTests
         }
 
         [TestMethod]
+<<<<<<< HEAD
+        public void TestLeagueBA()
+        {
+            BattingAverage ba = new BattingAverage(database);
+
+            var retVal = ba.Compute(new List<string> { "AL" }, StatsTarget.League, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+=======
         public void TestSingleIndividualWalktoStrikeoutRatio()
         {
             WalkToStrikeoutRatio BBSO = new WalkToStrikeoutRatio(database);
@@ -610,6 +617,7 @@ namespace LahmanStatsTests
             RunsProduced RP = new RunsProduced(database);
 
             var retVal = RP.Compute(new List<string> { "AL" }, StatsTarget.League, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+>>>>>>> 3ba012df14e8fa510a3a76c7d55ff3f2cf08b973
 
             var retVals = retVal.ToArray();
 
@@ -618,6 +626,13 @@ namespace LahmanStatsTests
             Assert.AreEqual(retVals[0].Identifier, "AL");
             Assert.AreEqual(retVals[0].Start, new DateTime(2006, 1, 1));
             Assert.AreEqual(retVals[0].Stop, new DateTime(2006, 12, 31));
+<<<<<<< HEAD
+            Assert.AreEqual(retVals[0].Value, 0.275, 1E-3);
+
+        }
+    }
+}
+=======
             Assert.AreEqual(retVals[0].Value, 19459.0, 1E-3);
         }
 
