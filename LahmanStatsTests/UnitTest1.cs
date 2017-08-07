@@ -12,17 +12,21 @@ namespace LahmanStatsTests
     public class UnitTest1
     {
         private static LahmanEntities database;
+        private static Cache dataCache;
 
         [ClassInitialize]
         public static void Setup(TestContext context)
         {
             database = new LahmanEntities();
+            dataCache = new Cache();
         }
 
         [ClassCleanup]
         public static void Cleanup()
         {
             database.Dispose();
+
+            dataCache.Clear();
         }
 
         [TestMethod]
@@ -473,7 +477,7 @@ namespace LahmanStatsTests
             Assert.AreEqual(retVals[0].Identifier, "AL");
             Assert.AreEqual(retVals[0].Start, new DateTime(2006, 1, 1));
             Assert.AreEqual(retVals[0].Stop, new DateTime(2006, 12, 31));
-            
+
             //removed test since our PA doesn't take into account RODI properly yet
             //Assert.AreEqual(retVals[0].Value, 6.1617, 1E-3);
         }
@@ -1086,13 +1090,77 @@ namespace LahmanStatsTests
             Assert.AreEqual(retVals[0].Target, StatsTarget.Individual);
             Assert.AreEqual(retVals[1].Target, StatsTarget.Individual);
         }
-/* TODO
-        [TestMethod]
-        public void TestTeamTotalChances()
-        {
-            StolenBasePercentage SBP = new StolenBasePercentage(database);
+        /* TODO
+                [TestMethod]
+                public void TestTeamTotalChances()
+                {
+                    StolenBasePercentage SBP = new StolenBasePercentage(database);
 
-            var retVal = SBP.Compute(new List<string> { "SEA" }, StatsTarget.Team, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+                    var retVal = SBP.Compute(new List<string> { "SEA" }, StatsTarget.Team, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+
+                    var retVals = retVal.ToArray();
+
+                    Assert.AreEqual(retVals.Length, 1);
+                    Assert.AreEqual(retVals[0].Target, StatsTarget.Team);
+                    Assert.AreEqual(retVals[0].Identifier, "SEA");
+                    Assert.AreEqual(retVals[0].Start, new DateTime(2006, 1, 1));
+                    Assert.AreEqual(retVals[0].Stop, new DateTime(2006, 12, 31));
+                    Assert.AreEqual(retVals[0].Value, .7412, 1E-3);
+
+                }
+
+                [TestMethod]
+                public void TestLeagueTotalChances()
+                {
+                    StolenBasePercentage SBP = new StolenBasePercentage(database);
+
+                    var retVal = SBP.Compute(new List<string> { "AL" }, StatsTarget.League, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+
+                    var retVals = retVal.ToArray();
+
+                    Assert.AreEqual(retVals.Length, 1);
+                    Assert.AreEqual(retVals[0].Target, StatsTarget.League);
+                    Assert.AreEqual(retVals[0].Identifier, "AL");
+                    Assert.AreEqual(retVals[0].Start, new DateTime(2006, 1, 1));
+                    Assert.AreEqual(retVals[0].Stop, new DateTime(2006, 12, 31));
+                    Assert.AreEqual(retVals[0].Value, .7146, 1E-3);
+                }
+                */
+
+        [TestMethod]
+        public void TestSingleIndividualBattingAverageOnBallsInPlay()
+        {
+            BattingAverageOnBallsInPlay BABIP = new BattingAverageOnBallsInPlay(database);
+
+            var retVal = BABIP.Compute(new List<string> { "suzukic01" }, StatsTarget.Individual, new DateTime(2005, 1, 1),
+                new DateTime(2006, 1, 1));
+
+            var retVals = retVal.ToArray();
+
+            // Should be one result per year requested (2005, 2006)
+            Assert.AreEqual(retVals.Length, 2);
+
+            Assert.AreEqual(retVals[0].Value, .316, 1E-3);
+            Assert.AreEqual(retVals[1].Value, .348, 1E-3);
+
+            Assert.AreEqual(retVals[0].Identifier, "suzukic01");
+            Assert.AreEqual(retVals[1].Identifier, "suzukic01");
+
+            Assert.AreEqual(retVals[0].Start, new DateTime(2005, 1, 1));
+            Assert.AreEqual(retVals[0].Stop, new DateTime(2005, 1, 1));
+            Assert.AreEqual(retVals[1].Start, new DateTime(2006, 1, 1));
+            Assert.AreEqual(retVals[1].Stop, new DateTime(2006, 1, 1));
+
+            Assert.AreEqual(retVals[0].Target, StatsTarget.Individual);
+            Assert.AreEqual(retVals[1].Target, StatsTarget.Individual);
+        }
+
+        [TestMethod]
+        public void TestTeamBattingAverageOnBallsInPlay()
+        {
+            BattingAverageOnBallsInPlay BABIP = new BattingAverageOnBallsInPlay(database);
+
+            var retVal = BABIP.Compute(new List<string> { "SEA" }, StatsTarget.Team, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
 
             var retVals = retVal.ToArray();
 
@@ -1101,16 +1169,17 @@ namespace LahmanStatsTests
             Assert.AreEqual(retVals[0].Identifier, "SEA");
             Assert.AreEqual(retVals[0].Start, new DateTime(2006, 1, 1));
             Assert.AreEqual(retVals[0].Stop, new DateTime(2006, 12, 31));
-            Assert.AreEqual(retVals[0].Value, .7412, 1E-3);
+            Assert.AreEqual(retVals[0].Value, .300, 1E-3);
 
         }
 
         [TestMethod]
-        public void TestLeagueTotalChances()
+        public void TestLeagueStolenBattingAverageOnBallsInPlay()
         {
-            StolenBasePercentage SBP = new StolenBasePercentage(database);
+            BattingAverageOnBallsInPlay BABIP = new BattingAverageOnBallsInPlay(database);
 
-            var retVal = SBP.Compute(new List<string> { "AL" }, StatsTarget.League, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+
+            var retVal = BABIP.Compute(new List<string> { "AL" }, StatsTarget.League, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
 
             var retVals = retVal.ToArray();
 
@@ -1119,8 +1188,121 @@ namespace LahmanStatsTests
             Assert.AreEqual(retVals[0].Identifier, "AL");
             Assert.AreEqual(retVals[0].Start, new DateTime(2006, 1, 1));
             Assert.AreEqual(retVals[0].Stop, new DateTime(2006, 12, 31));
-            Assert.AreEqual(retVals[0].Value, .7146, 1E-3);
+            Assert.AreEqual(retVals[0].Value, .305, 1E-3);
+        }
+
+
+        /* TODO, this information is not readily available
+        [TestMethod]
+        public void TestSingleIndividualRunsCreated()
+        {
+            RunsCreated RC = new RunsCreated(database);
+
+            var retVal = RC.Compute(new List<string> { "suzukic01" }, StatsTarget.Individual, new DateTime(2005, 1, 1),
+                new DateTime(2006, 1, 1));
+
+            var retVals = retVal.ToArray();
+
+            // Should be one result per year requested (2005, 2006)
+            Assert.AreEqual(retVals.Length, 2);
+
+            Assert.AreEqual(retVals[0].Value, 92, 1E-3);
+            Assert.AreEqual(retVals[1].Value, 99, 1E-3);
+
+            Assert.AreEqual(retVals[0].Identifier, "suzukic01");
+            Assert.AreEqual(retVals[1].Identifier, "suzukic01");
+
+            Assert.AreEqual(retVals[0].Start, new DateTime(2005, 1, 1));
+            Assert.AreEqual(retVals[0].Stop, new DateTime(2005, 1, 1));
+            Assert.AreEqual(retVals[1].Start, new DateTime(2006, 1, 1));
+            Assert.AreEqual(retVals[1].Stop, new DateTime(2006, 1, 1));
+
+            Assert.AreEqual(retVals[0].Target, StatsTarget.Individual);
+            Assert.AreEqual(retVals[1].Target, StatsTarget.Individual);
+        }
+
+        [TestMethod]
+        public void TestTeamRunsCreated()
+        {
+            RunsCreated RC = new RunsCreated(database);
+
+            var retVal = RC.Compute(new List<string> { "SEA" }, StatsTarget.Team, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+
+            var retVals = retVal.ToArray();
+
+            Assert.AreEqual(retVals.Length, 1);
+            Assert.AreEqual(retVals[0].Target, StatsTarget.Team);
+            Assert.AreEqual(retVals[0].Identifier, "SEA");
+            Assert.AreEqual(retVals[0].Start, new DateTime(2006, 1, 1));
+            Assert.AreEqual(retVals[0].Stop, new DateTime(2006, 12, 31));
+            Assert.AreEqual(retVals[0].Value, 731, 1E-3);
+
+        }
+
+        [TestMethod]
+        public void TestLeagueStolenRunsCreated()
+        {
+            RunsCreated RC = new RunsCreated(database);
+
+
+            var retVal = RC.Compute(new List<string> { "AL" }, StatsTarget.League, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+
+            var retVals = retVal.ToArray();
+
+            Assert.AreEqual(retVals.Length, 1);
+            Assert.AreEqual(retVals[0].Target, StatsTarget.League);
+            Assert.AreEqual(retVals[0].Identifier, "AL");
+            Assert.AreEqual(retVals[0].Start, new DateTime(2006, 1, 1));
+            Assert.AreEqual(retVals[0].Stop, new DateTime(2006, 12, 31));
+            Assert.AreEqual(retVals[0].Value, 11274, 1E-3);
         }
         */
+
+        [TestMethod]
+        public void TestIndividualCache()
+        {
+            BattingAverage ba = new BattingAverage(database);
+
+            var battingAverage = ba.Compute(new List<string> { "suzukic01" }, StatsTarget.Individual, new DateTime(2005, 1, 1),
+                new DateTime(2006, 1, 1));
+
+            var retVal = dataCache.Retrieve(new List<string> { "suzukic01" }, new DateTime(2005, 1, 1), new DateTime(2006, 1, 1));
+            dataCache.Add(new List<string> { "suzukic01" }, battingAverage, new DateTime(2005, 1, 1), new DateTime(2006, 1, 1));
+            var retVal2 = dataCache.Retrieve(new List<string> { "suzukic01" }, new DateTime(2005, 1, 1), new DateTime(2006, 1, 1));
+
+            Assert.AreEqual(retVal, null);
+            Assert.AreEqual(retVal2, battingAverage);
+        }
+
+        [TestMethod]
+        public void TestTeamCache()
+        {
+            BattingAverage ba = new BattingAverage(database);
+
+            var battingAverage = ba.Compute(new List<string> { "SEA" }, StatsTarget.Team, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+
+            var retVal = dataCache.Retrieve(new List<string> { "SEA" }, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+            dataCache.Add(new List<string> { "SEA" }, battingAverage, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+            var retVal2 = dataCache.Retrieve(new List<string> { "SEA" }, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+
+            Assert.AreEqual(retVal, null);
+            Assert.AreEqual(retVal2, battingAverage);
+        }
+        
+        [TestMethod]
+        public void TestLeagueCache()
+        {
+            BattingAverage ba = new BattingAverage(database);
+
+            var battingAverage = ba.Compute(new List<string> { "AL" }, StatsTarget.League, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+
+            var retVal = dataCache.Retrieve(new List<string> { "AL" }, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+            dataCache.Add(new List<string> { "AL" }, battingAverage, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+            var retVal2 = dataCache.Retrieve(new List<string> { "AL" }, new DateTime(2006, 1, 1), new DateTime(2006, 12, 31));
+
+            Assert.AreEqual(retVal, null);
+            Assert.AreEqual(retVal2, battingAverage);
+        }
+
     }
 }

@@ -43,5 +43,6 @@
             // Find those rows from the data entries that match the years requested 
             return from row in data where row.yearID >= startYear where row.yearID <= stopYear select row;
         }
+
     }
 }
