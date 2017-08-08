@@ -11,6 +11,7 @@
 // ***********************************************************************
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using StatsManager;
 using WpfApplication1;
 using System.Linq;
