@@ -93,9 +93,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Cache.cs" />
+    <Compile Include="RunsCreated.cs" />
     <Compile Include="OnBasePercentage.cs" />
     <Compile Include="ExtraBaseHits.cs" />
     <Compile Include="OnBasePlusSlugging.cs" />
+    <Compile Include="BattingAverageOnBallsInPlay.cs" />
     <Compile Include="TotalChances.cs" />
     <Compile Include="TotalAverage.cs" />
     <Compile Include="SluggingPercentage.cs" />
