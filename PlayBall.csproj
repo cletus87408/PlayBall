@@ -275,11 +275,11 @@
     <Resource Include="Images\74d96a0a86cde684919886b75799f8e5.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="529289.jpg" />
     <Resource Include="36065293-baseball-images.jpg" />
-    <Resource Include="462311.jpg" />
     <Resource Include="6-12-1880-perfect-game-scorecard-2.jpg" />
+    <Resource Include="462311.jpg" />
     <Resource Include="11LOCKERROOMWEB01-facebookJumbo.jpg" />
+    <Resource Include="529289.jpg" />
     <Content Include="Model1.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>Model1.edmx</DependentUpon>

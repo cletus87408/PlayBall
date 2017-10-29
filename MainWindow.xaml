@@ -21,7 +21,7 @@
                     <DropShadowEffect Opacity="0.75" ShadowDepth="30"/>
                 </Button.Effect>
                 <Button.Background>
-                    <ImageBrush ImageSource="36065293-baseball-images.jpg" Stretch="UniformToFill"/>
+                    <ImageBrush ImageSource="36065293-baseball-images.jpg" Stretch="UniformToFill" TileMode="None"/>
                 </Button.Background>
             </Button>
             <Button Content="Scoring" Width="400" Canvas.Left="600" Canvas.Top="85" Height="300" FontFamily="Cooper Black" FontSize="72">
