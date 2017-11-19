@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using LahmanDatabaseEntities;
 using StatsLibrary;
 using StatsManager;
-using WpfApplication1;
 
 namespace LahmanStats
 {

@@ -1,9 +1,10 @@
-﻿namespace LahmanStats
+﻿using LahmanDatabaseEntities;
+
+namespace LahmanStats
 {
     using System;
     using System.Linq;
     using System.Data.Entity;
-    using WpfApplication1;
 
     /// <summary>
     /// Class LahmanDatabasePlayerHelpers.  Extension methods for extracting a player by id and year range from one of the

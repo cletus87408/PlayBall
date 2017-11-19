@@ -1,0 +1,11 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PlayBall.Team_Management"
+        xmlns:Syncfusion="http://schemas.syncfusion.com/wpf" x:Class="PlayBall.Team_Management.TeamChooserView"
+        mc:Ignorable="d"
+        Title="TeamChooserView" Height="300" Width="556.352">
+    <Syncfusion:SfDataGrid Name="teamGrid" HorizontalAlignment="Stretch" Margin="5,5,5,5" VerticalAlignment="Stretch" AutoGeneratingColumn="teamGrid_AutoGeneratingColumn"/>
+</Window>

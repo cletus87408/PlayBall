@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>LahmanStats</RootNamespace>
     <AssemblyName>LahmanStats</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -120,9 +121,9 @@
     <Compile Include="StatsAck.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\PlayBall.csproj">
-      <Project>{09DD59E9-197F-4C19-A11D-30A743231EE6}</Project>
-      <Name>PlayBall</Name>
+    <ProjectReference Include="..\LahmanDatabaseEntities\LahmanDatabaseEntities.csproj">
+      <Project>{995732c1-8f94-4955-ac51-cb59f2754baa}</Project>
+      <Name>LahmanDatabaseEntities</Name>
     </ProjectReference>
     <ProjectReference Include="..\StatsLibrary\StatsLibrary.csproj">
       <Project>{33BF1907-FED8-4A20-A155-D9ADAB5F80A0}</Project>

@@ -12,9 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using StatsLibrary;
 
-namespace WpfApplication1
+namespace PlayBall
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -24,6 +23,12 @@ namespace WpfApplication1
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Team_Button_Click(object sender, RoutedEventArgs e)
+        {
+            Teams teamsWindow = new Teams();
+            teamsWindow.Show();
         }
     }
 }

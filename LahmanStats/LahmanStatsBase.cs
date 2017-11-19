@@ -13,8 +13,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections;
 using StatsManager;
-using WpfApplication1;
 using System.Linq;
+using LahmanDatabaseEntities;
 
 namespace LahmanStats
 {
@@ -29,7 +29,7 @@ namespace LahmanStats
     /// It also provides default implementations for the metadata object which, for the
     /// time being for most stats, will probably be empty. 
     /// </summary>
-    /// <seealso cref="StatsManager.IStatsPlugin" />
+    /// <seealso cref="IStatsPlugin" />
     public abstract class LahmanStatsBase : IStatsPlugin
     {
         /// <summary>

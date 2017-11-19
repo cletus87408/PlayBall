@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using StatsLibrary;
 using StatsManager;
-using WpfApplication1;
+using LahmanDatabaseEntities;
 
 namespace LahmanStats
 {

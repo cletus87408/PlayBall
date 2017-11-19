@@ -1,8 +1,9 @@
-﻿namespace LahmanStats
+﻿using LahmanDatabaseEntities;
+
+namespace LahmanStats
 {
     using System;
     using System.Linq;
-    using WpfApplication1;
 
     /// <summary>
     /// Class LahmanDatabaseFieldingExtensions.  Fielding database extension methods to provide convenient filters

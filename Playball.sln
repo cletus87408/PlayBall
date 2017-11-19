@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlayBall", "PlayBall.csproj", "{09DD59E9-197F-4C19-A11D-30A743231EE6}"
 EndProject
@@ -14,6 +14,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LahmanStatsTests", "LahmanStatsTests\LahmanStatsTests.csproj", "{A8D6C282-2CE1-46E1-A851-0A7863EC4C74}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LahmanStats", "LahmanStats\LahmanStats.csproj", "{866FDE38-5752-4D83-BE16-5BF911C98E14}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LahmanDatabaseEntities", "LahmanDatabaseEntities\LahmanDatabaseEntities.csproj", "{995732C1-8F94-4955-AC51-CB59F2754BAA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,8 +47,15 @@ Global
 		{866FDE38-5752-4D83-BE16-5BF911C98E14}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{866FDE38-5752-4D83-BE16-5BF911C98E14}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{866FDE38-5752-4D83-BE16-5BF911C98E14}.Release|Any CPU.Build.0 = Release|Any CPU
+		{995732C1-8F94-4955-AC51-CB59F2754BAA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{995732C1-8F94-4955-AC51-CB59F2754BAA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{995732C1-8F94-4955-AC51-CB59F2754BAA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{995732C1-8F94-4955-AC51-CB59F2754BAA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8CB41E3E-FFCB-4251-AE70-E6B54C536ECF}
 	EndGlobalSection
 EndGlobal
