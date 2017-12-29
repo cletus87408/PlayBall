@@ -64,9 +64,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LahmanDatabaseEntities\LahmanDatabaseEntities.csproj">
-      <Project>{b212b09b-680f-493f-8ff6-00bdd2a66c07}</Project>
-      <Name>LahmanDatabaseEntities</Name>
+    <ProjectReference Include="..\Database\Database.csproj">
+      <Project>{bd3226c7-447f-4158-b7bd-45e47f0e61cd}</Project>
+      <Name>Database</Name>
     </ProjectReference>
     <ProjectReference Include="..\LahmanStats\LahmanStats.csproj">
       <Project>{866fde38-5752-4d83-be16-5bf911c98e14}</Project>

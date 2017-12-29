@@ -1,4 +1,4 @@
-﻿using LahmanDatabaseEntities;
+﻿using Database;
 
 namespace LahmanStats
 {
@@ -6,9 +6,9 @@ namespace LahmanStats
     using System.Linq;
 
     /// <summary>
-    /// Class LahmanDatabaseFieldingExtensions.  Fielding database extension methods to provide convenient filters
+    /// Class LahmanEntitiesFieldingExtensions.  Fielding database extension methods to provide convenient filters
     /// </summary>
-    static class LahmanDatabaseFieldingExtensions
+    static class LahmanEntitiesFieldingExtensions
     { 
         //searches for a matching individual ID in the fielding database and returns all matching rows
         public static IQueryable<Fielding> Individual(this IQueryable<Fielding> data, string id)

@@ -121,9 +121,9 @@
     <Compile Include="StatsAck.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LahmanDatabaseEntities\LahmanDatabaseEntities.csproj">
-      <Project>{995732c1-8f94-4955-ac51-cb59f2754baa}</Project>
-      <Name>LahmanDatabaseEntities</Name>
+    <ProjectReference Include="..\Database\Database.csproj">
+      <Project>{bd3226c7-447f-4158-b7bd-45e47f0e61cd}</Project>
+      <Name>Database</Name>
     </ProjectReference>
     <ProjectReference Include="..\StatsLibrary\StatsLibrary.csproj">
       <Project>{33BF1907-FED8-4A20-A155-D9ADAB5F80A0}</Project>

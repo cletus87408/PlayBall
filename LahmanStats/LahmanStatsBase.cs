@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using System.Collections;
 using StatsManager;
 using System.Linq;
-using LahmanDatabaseEntities;
+using Database;
 
 namespace LahmanStats
 {

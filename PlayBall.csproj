@@ -183,9 +183,9 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="LahmanDatabaseEntities\LahmanDatabaseEntities.csproj">
-      <Project>{b212b09b-680f-493f-8ff6-00bdd2a66c07}</Project>
-      <Name>LahmanDatabaseEntities</Name>
+    <ProjectReference Include="Database\Database.csproj">
+      <Project>{bd3226c7-447f-4158-b7bd-45e47f0e61cd}</Project>
+      <Name>Database</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

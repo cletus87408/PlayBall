@@ -1,4 +1,4 @@
-﻿using LahmanDatabaseEntities;
+﻿using Database;
 
 namespace LahmanStats
 {
@@ -7,7 +7,7 @@ namespace LahmanStats
     using System.Data.Entity;
 
     /// <summary>
-    /// Class LahmanDatabasePlayerHelpers.  Extension methods for extracting a player by id and year range from one of the
+    /// Class LahmanEntitiesPlayerHelpers.  Extension methods for extracting a player by id and year range from one of the
     /// databases that supports these keys
     /// 
     /// This is why C# Generics are so MONSTROUSLY inferior to their C++ counterpart.  In C++, I could cover every single 
@@ -15,7 +15,7 @@ namespace LahmanStats
     /// hard.  I could solve it with dynamic programming, but that uses reflection (slow) and is ugly as sin.  Oh well, perhaps
     /// one day C# will get proper Duck Typing.
     /// </summary>
-    static class LahmanDatabaseBattingExtensions
+    static class LahmanEntitiesBattingExtensions
     {
         //searches for a matching individual ID in the batting database and returns all matching rows
         public static IQueryable<Batting> Individual(this IQueryable<Batting> data, string id)

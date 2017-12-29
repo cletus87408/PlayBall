@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using LahmanDatabaseEntities;
+using Database;
 using LahmanStats;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StatsManager;
