@@ -11,29 +11,20 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using ReactiveUI;
 
 namespace PlayBall.Team_Management
 {
     /// <summary>
     /// Interaction logic for TeamChooserView.xaml
     /// </summary>
-    public partial class TeamChooserView : Window, IViewFor<TeamChooserModel>
+    public partial class TeamChooserView : Window
     {
-        public TeamChooserModel ViewModel { get; set; }
-
-        object IViewFor.ViewModel
+        private TeamChooserModel ViewModel;
+        public TeamChooserView()
         {
-            get => ViewModel;
-            set => ViewModel = (TeamChooserModel) value;
-        }
-
-        public TeamChooserView() 
-        {
+            InitializeComponent();
             ViewModel = new TeamChooserModel();
+            this.DataContext = this.ViewModel;
         }
-
-        private static Dictionary<string, string> columnsToDisplay =
-            new Dictionary<string, string> {{"yearID", "Year"}, {"lgID", "League"}, {"divID", "Division"}, {"name", "Name"}};
     }
 }

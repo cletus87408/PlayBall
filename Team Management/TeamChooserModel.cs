@@ -2,37 +2,46 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Reactive.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using Database;
-using ReactiveUI;
+using PlayBall.Annotations;
 
 namespace PlayBall.Team_Management
 {
-    public class TeamChooserModel : ReactiveObject
+    public class TeamChooserModel  : INotifyPropertyChanged
     {
-        private ReactiveList<Team> _teams = new ReactiveList<Team>();
-        public ObservableAsPropertyHelper<Team> SelectedTeam { get; private set; }
+        public ObservableCollection<Team> teams;
 
-        public ReactiveList<Team> TeamsCollection
+        public ObservableCollection<Team> Teams
         {
-            get { return _teams; }
-            set { this.RaiseAndSetIfChanged(ref _teams, value); }
+            get { return teams; }
         }
-
-        public ReactiveCommand SelectTeam;
-
         public TeamChooserModel()
         {
+            teams = new ObservableCollection<Team>();
+
             using (var db = new LahmanEntities())
             {
                 foreach (var team in db.Teams)
                 {
-                    this._teams.Add(team);
+                    this.teams.Add(team);
                 }
             }
+
+            this.OnPropertyChanged("Teams");
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

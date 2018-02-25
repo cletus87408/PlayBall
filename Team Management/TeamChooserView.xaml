@@ -4,7 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PlayBall.Team_Management"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+        xmlns:regularExpressions="clr-namespace:System.Text.RegularExpressions;assembly=System"
+        x:Class="PlayBall.Team_Management.TeamChooserView"
         mc:Ignorable="d"
-        Title="TeamChooserView" Height="300" Width="556.352">
-    <DataGrid Name="TeamGrid" HorizontalAlignment="Left" Height="269" VerticalAlignment="Top" Width="546" RenderTransformOrigin="-0.137,-0.338"/>
+        Title="TeamChooserView" Height="600" Width="600">
+    <Grid>
+    <DataGrid ItemsSource="{Binding Teams}"></DataGrid>
+    </Grid>
 </Window>
