@@ -1,18 +1,19 @@
-﻿<Window
+﻿<Window x:Class="Playball.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PlayBall"
-        xmlns:Syncfusion="http://schemas.syncfusion.com/wpf" x:Class="PlayBall.MainWindow"
+        xmlns:local="clr-namespace:Playball"
         mc:Ignorable="d"
-        Title="PlayBall!" Height="768" Width="1024">
+        Title="MainWindow" Height="768" Width="1024">
+
+
     <Window.Resources>
         <Storyboard x:Key="OnMouseEnter1"/>
     </Window.Resources>
     <StackPanel>
         <StackPanel.Background>
-            <ImageBrush ImageSource="529289.jpg" Stretch="UniformToFill"/>
+            <ImageBrush ImageSource="Images/529289.jpg" Stretch="UniformToFill"/>
         </StackPanel.Background>
         <Canvas>
             <Button x:Name="button" Content="Fielding" Width="400" Canvas.Left="70" Canvas.Top="50" Height="300" VerticalContentAlignment="Bottom" FontFamily="Cooper Black" FontSize="72">
@@ -21,7 +22,7 @@
                     <DropShadowEffect Opacity="0.75" ShadowDepth="30"/>
                 </Button.Effect>
                 <Button.Background>
-                    <ImageBrush ImageSource="36065293-baseball-images.jpg" Stretch="UniformToFill" TileMode="None"/>
+                    <ImageBrush ImageSource="Images/36065293-baseball-images.jpg" Stretch="UniformToFill" TileMode="None"/>
                 </Button.Background>
             </Button>
             <Button Content="Scoring" Width="400" Canvas.Left="524" Canvas.Top="50" Height="300" FontFamily="Cooper Black" FontSize="72">
@@ -30,7 +31,7 @@
                     <DropShadowEffect Opacity="0.75" ShadowDepth="30"/>
                 </Button.Effect>
                 <Button.Background>
-                    <ImageBrush ImageSource="6-12-1880-perfect-game-scorecard-2.jpg"/>
+                    <ImageBrush ImageSource="Images/6-12-1880-perfect-game-scorecard-2.jpg"/>
                 </Button.Background>
             </Button>
             <Button Width="400" Height="300" Canvas.Left="70" Canvas.Top="401" HorizontalContentAlignment="Center" FontFamily="Cooper Black" FontSize="60" Click="Team_Button_Click">
@@ -40,7 +41,7 @@
                     <DropShadowEffect Opacity="0.75" ShadowDepth="30"/>
                 </Button.Effect>
                 <Button.Background>
-                    <ImageBrush ImageSource="11LOCKERROOMWEB01-facebookJumbo.jpg" Stretch="UniformToFill"/>
+                    <ImageBrush ImageSource="Images/11LOCKERROOMWEB01-facebookJumbo.jpg" Stretch="UniformToFill"/>
                 </Button.Background>
             </Button>
             <Button Content="Hitting" Width="400" Canvas.Left="524" Canvas.Top="401" Height="300" FontFamily="Cooper Black" FontSize="72">
@@ -49,9 +50,10 @@
                     <DropShadowEffect Opacity="0.75" ShadowDepth="30"/>
                 </Button.Effect>
                 <Button.Background>
-                    <ImageBrush ImageSource="462311.jpg" Stretch="UniformToFill"/>
+                    <ImageBrush ImageSource="Images/462311.jpg" Stretch="UniformToFill"/>
                 </Button.Background>
             </Button>
         </Canvas>
     </StackPanel>
+
 </Window>
