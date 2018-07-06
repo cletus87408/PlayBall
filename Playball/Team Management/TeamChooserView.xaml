@@ -8,8 +8,17 @@
         xmlns:regularExpressions="clr-namespace:System.Text.RegularExpressions;assembly=System"
         x:Class="PlayBall.Team_Management.TeamChooserView"
         mc:Ignorable="d"
-        Title="TeamChooserView" Height="600" Width="600">
+        Title="TeamChooserView" Height="600" Width="1129">
     <Grid>
-    <DataGrid ItemsSource="{Binding Teams}"></DataGrid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Column="0">
+            <DatePicker Name="TeamChooserYear"/>
+            <DataGrid Name="TeamChooserGrid" />
+        </StackPanel>         
+        <Image Grid.Column="1" Name="TeamChooserLogo" Margin="50,50,50,50"/>
+
     </Grid>
 </Window>
