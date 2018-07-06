@@ -443,8 +443,8 @@ namespace BaseballAverageStatsTest
         [TestMethod]
         public void RangeFactorLarge() //used ichiro 2003 data
         {
-            double RetVal = BasicStats.RangeFactor(337, 12, 1367);
-            Assert.AreEqual(RetVal, ((9.0 * (337 + 12)) / 1367), 1E-10);
+            double RetVal = BasicStats.RangeFactor(337, 12, 1367.1);
+            Assert.AreEqual(RetVal, ((9.0 * (337 + 12)) / (1367 + (1/3))), 1E-10);
         }
     }
 
@@ -657,7 +657,29 @@ namespace BaseballAverageStatsTest
             Assert.AreEqual(RetVal, (((weightedOnBaseAverage - .450) / 4) * plateAppearances), 1E-10);
         }
     }
-
+    [TestClass]
+    public class InningsStatsTest
+    {
+        //converts innings decimal to real decimal value
+        [TestMethod]
+        public void InningsPassedZero()
+        {
+            double RetVal = PitchingStats.Innings(0);
+            Assert.AreEqual(RetVal, 0.0); //function returns 0.0 if passed a 0
+        }
+        [TestMethod]
+        public void InningsValid()
+        {
+            double RetVal = PitchingStats.Innings(1.2);
+            Assert.AreEqual(RetVal, (1 + (2 / 3)));
+        }
+        [TestMethod]
+        public void InningsValidLarge()
+        {
+            double RetVal = PitchingStats.Innings(11123.1);
+            Assert.AreEqual(RetVal, (11123 + (1 / 3)));
+        }
+    }
     [TestClass]
     public class EarnedRunAverageStatsTest
     {
@@ -681,7 +703,7 @@ namespace BaseballAverageStatsTest
         public void ERAValidLarge() //used randy johnson 1995
         {
             double RetVal = PitchingStats.EarnedRunAverage(65, 214.1);
-            Assert.AreEqual(RetVal, ((9.0 * 65) / 214.1), 1E-10); 
+            Assert.AreEqual(RetVal, ((9.0 * 65) / (214 + (1/3))), 1E-10); 
         }
     }
 
@@ -747,6 +769,12 @@ namespace BaseballAverageStatsTest
     {
         // Innings Pitched Per Game Started = Innings/Games Started
         [TestMethod]
+        public void InningsPitchedPerGamesStartedDivideByZero()
+        {
+            double RetVal = PitchingStats.InningsPitchedPerGamesStarted(0, 1);
+            Assert.AreEqual(RetVal, 0.0);
+        }
+        [TestMethod]
         public void InningsPitchedPerGamesStartedValid()
         {
             double RetVal = PitchingStats.InningsPitchedPerGamesStarted(1, 1);
@@ -757,7 +785,7 @@ namespace BaseballAverageStatsTest
         public void InningsPitchedPerGamesStartedValidLarge() //using randy johnson 1995
         {
             double RetVal = PitchingStats.InningsPitchedPerGamesStarted(30, 214.1);
-            Assert.AreEqual(RetVal, (214.1 / 30), 1E-10); 
+            Assert.AreEqual(RetVal, ((214 + (1/3)) / 30.0), 1E-10); 
         }
     }
 
@@ -808,8 +836,8 @@ namespace BaseballAverageStatsTest
         [TestMethod]
         public void RunAverageValidLarge()
         {
-            double RetVal = PitchingStats.RunAverage(200, 1700);
-            Assert.AreEqual(RetVal, ((200 * 9.0) / 1700), 1E-10);
+            double RetVal = PitchingStats.RunAverage(200, 1700.1);
+            Assert.AreEqual(RetVal, ((200 * 9.0) / 1700 +(1/3)), 1E-10);
         }
     }
 
@@ -834,8 +862,8 @@ namespace BaseballAverageStatsTest
         [TestMethod]
         public void WalksPlusHitsPerInningsPitchedValidLarge()
         {
-            double RetVal = PitchingStats.WalksPlusHitsPerInningPitched(100, 50, 300);
-            Assert.AreEqual(RetVal, ((100 + 50.0) / 300), 1E-10);
+            double RetVal = PitchingStats.WalksPlusHitsPerInningPitched(100, 50, 300.2);
+            Assert.AreEqual(RetVal, ((100 + 50.0) / (300 + (2/3))), 1E-10);
         }
 
     }

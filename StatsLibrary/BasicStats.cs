@@ -163,7 +163,7 @@ namespace StatsLibrary
         // Range Factor = 9 * (putouts + assists) / innings played
         public static double RangeFactor(int putouts, int assists, double inningsPlayed) 
         {
-            return inningsPlayed != 0 ? ((9.0 * (putouts + assists)) / inningsPlayed) : 0.0;
+            return inningsPlayed != 0 ? ((9.0 * (putouts + assists)) / PitchingStats.Innings(inningsPlayed)) : 0.0;
         }
     }
 }
